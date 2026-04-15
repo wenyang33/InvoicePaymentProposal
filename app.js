@@ -57,7 +57,7 @@ function showTyping() {
     typingDiv.className = 'typing-indicator';
     typingDiv.id = 'typingIndicator';
     typingDiv.innerHTML = `
-        <div class="message-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="message-avatar bot-avatar"><i class="fas fa-wand-magic-sparkles"></i></div>
         <div class="typing-dots"><span></span><span></span><span></span></div>
     `;
     chatMessages.appendChild(typingDiv);
@@ -97,7 +97,7 @@ function addBotMessage(html, delay = 1500) {
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message bot-message';
             msgDiv.innerHTML = `
-                <div class="message-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+                <div class="message-avatar bot-avatar"><i class="fas fa-wand-magic-sparkles"></i></div>
                 <div class="message-content">
                     <div class="message-bubble">${html}</div>
                     <span class="message-time">${getTimeString()}</span>

@@ -1,38 +1,59 @@
 /* ========================================
-   CSS Variables & Theme
+   SAP Fiori Horizon Theme — Joule AI Design
+   Based on SAP Design System Guidelines v1.130
+   ======================================== */
+
+/* ========================================
+   CSS Variables — SAP Horizon Morning
    ======================================== */
 :root {
-    --primary: #6366f1;
-    --primary-light: #818cf8;
-    --primary-dark: #4f46e5;
-    --primary-bg: #eef2ff;
-    --accent: #7c3aed;
-    --success: #16a34a;
-    --success-bg: #f0fdf4;
-    --warning: #ea580c;
-    --warning-bg: #fff7ed;
-    --danger: #dc2626;
-    --danger-bg: #fef2f2;
-    --info: #0891b2;
-    --info-bg: #ecfeff;
+    /* SAP Brand & AI Colors */
+    --sapBrandColor: #0070F2;
+    --sapHighlightColor: #0064D9;
+    --sapAccentColor5: #5D36FF;  /* Joule Purple */
+    --sapAccentColor5Light: #EBE5FF;
+    --jouleGradientStart: #5D36FF;
+    --jouleGradientEnd: #A100C2;
 
-    --bg-primary: #f8fafc;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f1f5f9;
-    --bg-chat: #f5f5f7;
+    /* Primary palette */
+    --primary: #0070F2;
+    --primary-light: #4DA1FF;
+    --primary-dark: #0057C7;
+    --primary-bg: #E1F4FF;
 
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-tertiary: #94a3b8;
-    --text-inverse: #ffffff;
+    /* Semantic Colors — Horizon */
+    --success: #30914C;
+    --success-bg: #F5FAE5;
+    --warning: #E76500;
+    --warning-bg: #FFF3B8;
+    --danger: #E00B1C;
+    --danger-bg: #FFEAF0;
+    --info: #0070F2;
+    --info-bg: #E1F4FF;
 
-    --border-color: #e2e8f0;
-    --border-light: #f1f5f9;
+    /* Surface & Background — Morning Horizon */
+    --bg-primary: #F5F6F7;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #EFF1F2;
+    --bg-chat: #F5F6F7;
+    --bg-shell: #354A5F;
 
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+    /* Text — Horizon */
+    --text-primary: #1D2D3E;
+    --text-secondary: #556B82;
+    --text-tertiary: #8396A8;
+    --text-inverse: #FFFFFF;
 
+    /* Borders */
+    --border-color: #D9D9D9;
+    --border-light: #EFF1F2;
+
+    /* Elevation */
+    --shadow-sm: 0 0 0 1px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 0 0 1px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.12);
+
+    /* Radii — Horizon uses softer, more rounded corners */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
@@ -49,11 +70,11 @@
 html, body { height: 100%; overflow: hidden; }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #1a1a2e;
+    font-family: '72', '72full', 'Inter', Arial, Helvetica, sans-serif;
+    background: var(--bg-shell);
     color: var(--text-primary);
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -68,35 +89,45 @@ body {
     border-radius: 12px;
     margin: 8px;
     background: var(--bg-secondary);
-    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    box-shadow: 0 0 40px rgba(0,0,0,0.25);
 }
 
 /* ========================================
-   Top Bar
+   Shell Bar — SAP Fiori Horizon
    ======================================== */
 .top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 16px;
-    background: var(--primary-dark);
+    padding: 0 16px;
+    height: 44px;
+    background: var(--bg-shell);
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
 }
 
 .top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 8px; }
-.brand-title { color: white; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+
+.brand-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
 .icon-btn {
     width: 32px; height: 32px; border: none; background: transparent;
-    color: rgba(255,255,255,0.8); border-radius: var(--radius-sm);
+    color: rgba(255,255,255,0.85); border-radius: var(--radius-sm);
     cursor: pointer; display: flex; align-items: center; justify-content: center;
     transition: var(--transition); font-size: 14px;
 }
-.icon-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+.icon-btn:hover { background: rgba(255,255,255,0.12); color: white; }
 
 /* ========================================
-   Landing Page
+   Landing Page — Joule AI Welcome
    ======================================== */
 .landing-page {
     flex: 1;
@@ -105,9 +136,10 @@ body {
     overflow: hidden;
 }
 
+/* Hero with Joule gradient */
 .hero-section {
     flex: 1;
-    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 40%, #a78bfa 70%, #c4b5fd 100%);
+    background: linear-gradient(180deg, #354A5F 0%, #4A6A8A 30%, #7994B0 60%, #A8BDD0 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,17 +150,25 @@ body {
 .hero-icon { position: relative; display: flex; align-items: center; justify-content: center; }
 
 .diamond-icon {
-    width: 80px; height: 80px; background: white; border-radius: 18px;
-    transform: rotate(45deg); display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+    width: 84px; height: 84px;
+    background: white;
+    border-radius: 22px;
+    transform: rotate(45deg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 32px rgba(0, 112, 242, 0.2);
 }
 
 .diamond-icon i {
-    transform: rotate(-45deg); font-size: 28px; color: var(--primary);
+    transform: rotate(-45deg);
+    font-size: 30px;
+    background: linear-gradient(135deg, var(--jouleGradientStart), var(--jouleGradientEnd));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .sparkle {
-    position: absolute; color: rgba(255,255,255,0.9); font-size: 16px;
+    position: absolute; color: rgba(255,255,255,0.85); font-size: 16px;
     animation: sparkleFloat 3s ease-in-out infinite;
 }
 .sparkle-1 { top: -20px; left: -10px; font-size: 14px; animation-delay: 0s; }
@@ -142,7 +182,7 @@ body {
 
 .welcome-section {
     padding: 0 24px;
-    background: linear-gradient(180deg, #c4b5fd 0%, #e9e5f5 15%, #f5f5f7 40%);
+    background: linear-gradient(180deg, #A8BDD0 0%, #D2DDE6 12%, var(--bg-primary) 35%);
     text-align: left;
     max-width: 100%;
 }
@@ -160,21 +200,25 @@ body {
 }
 
 .welcome-subtitle {
-    font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;
-    padding: 10px 16px; background: rgba(255,255,255,0.8);
+    font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;
+    padding: 10px 16px; background: rgba(255,255,255,0.85);
     border-radius: var(--radius-full); display: inline-block;
     margin-left: calc(50% - 340px); backdrop-filter: blur(4px);
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
 }
 
 .get-started-btn {
     margin-left: calc(50% - 340px); margin-bottom: 16px;
-    padding: 8px 20px; background: var(--bg-secondary); color: var(--text-primary);
-    border: 1px solid var(--border-color); border-radius: var(--radius-full);
-    font-size: 13px; font-weight: 500; cursor: pointer;
+    padding: 8px 24px;
+    background: var(--sapBrandColor);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 13px; font-weight: 600; cursor: pointer;
     transition: var(--transition); display: block;
+    font-family: inherit;
 }
-.get-started-btn:hover { background: var(--bg-tertiary); }
+.get-started-btn:hover { background: var(--primary-dark); }
 
 .starter-chips {
     display: flex; flex-wrap: wrap; gap: 8px;
@@ -189,7 +233,7 @@ body {
     font-family: inherit;
 }
 .chip:hover { background: var(--primary-bg); border-color: var(--primary-light); color: var(--primary); }
-.chip i { font-size: 11px; }
+.chip i { font-size: 11px; color: var(--sapBrandColor); }
 
 /* Landing Input */
 .landing-input-area {
@@ -203,15 +247,18 @@ body {
 }
 
 .landing-input-container input {
-    flex: 1; padding: 12px 16px; border: 1px solid var(--border-color);
+    flex: 1; padding: 10px 16px; border: 1px solid var(--border-color);
     border-radius: var(--radius-full); font-size: 14px; font-family: inherit;
     outline: none; transition: var(--transition); background: var(--bg-secondary);
 }
-.landing-input-container input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.landing-input-container input:focus {
+    border-color: var(--sapBrandColor);
+    box-shadow: 0 0 0 3px rgba(0, 112, 242, 0.16);
+}
 
 .send-btn {
-    width: 42px; height: 42px; border: none; border-radius: var(--radius-full);
-    background: var(--primary); color: white; cursor: pointer;
+    width: 40px; height: 40px; border: none; border-radius: var(--radius-full);
+    background: var(--sapBrandColor); color: white; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: var(--transition); flex-shrink: 0;
 }
@@ -253,10 +300,16 @@ body {
     flex-shrink: 0; font-size: 16px;
 }
 
-.bot-avatar { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+/* Joule AI avatar — purple gradient */
+.bot-avatar {
+    background: linear-gradient(135deg, var(--jouleGradientStart), var(--jouleGradientEnd));
+    color: white;
+}
+
 .user-avatar {
-    background: linear-gradient(135deg, #6366f1, #4f46e5); color: white;
-    font-size: 12px; font-weight: 600;
+    background: var(--bg-shell);
+    color: white;
+    font-size: 12px; font-weight: 700;
 }
 
 .message-content { display: flex; flex-direction: column; gap: 4px; max-width: calc(100% - 48px); }
@@ -267,7 +320,7 @@ body {
     border-top-left-radius: 4px; box-shadow: var(--shadow-sm);
 }
 .user-message .message-bubble {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: var(--sapBrandColor);
     color: white; border-top-right-radius: 4px;
 }
 
@@ -279,11 +332,11 @@ body {
 .user-message .message-time { text-align: right; }
 
 /* ========================================
-   Steps Container
+   Steps Container — SAP Wizard Pattern
    ======================================== */
 .steps-container {
     margin: 12px 0; padding: 16px; background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-md); border: 1px solid var(--border-light);
 }
 
 .step-item {
@@ -299,7 +352,7 @@ body {
 
 .step-item:not(:last-child)::before {
     content: ''; position: absolute; left: -2px; top: 0; bottom: 0;
-    width: 2px; background: var(--primary);
+    width: 2px; background: var(--sapBrandColor);
     animation: lineGrow 0.5s ease-out forwards; transform-origin: top;
 }
 
@@ -307,15 +360,15 @@ body {
 
 .step-number {
     width: 28px; height: 28px; border-radius: 50%;
-    background: var(--primary); color: white;
+    background: var(--sapBrandColor); color: white;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600; flex-shrink: 0;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
 }
 
 .step-item:not(:last-child) .step-number { position: absolute; left: -15px; }
 
 .step-content { flex: 1; }
-.step-content strong { display: block; font-size: 13px; margin-bottom: 2px; }
+.step-content strong { display: block; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
 .step-content span { font-size: 12px; color: var(--text-secondary); }
 
 @keyframes stepFadeIn {
@@ -329,7 +382,7 @@ body {
 .step-item:nth-child(4) { animation-delay: 0.7s; }
 
 /* ========================================
-   Joule List Card
+   Joule List Card — SAP Panel/Card
    ======================================== */
 .joule-list-card {
     margin: 12px 0; border: 1px solid var(--border-color);
@@ -346,8 +399,8 @@ body {
 }
 
 .list-card-title { display: flex; align-items: center; gap: 10px; }
-.list-card-title i { font-size: 18px; color: var(--primary); }
-.list-card-title h3 { font-size: 14px; font-weight: 600; }
+.list-card-title i { font-size: 18px; color: var(--sapBrandColor); }
+.list-card-title h3 { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .list-card-subtitle { font-size: 12px; color: var(--text-secondary); display: block; }
 .list-card-count { font-size: 12px; color: var(--text-tertiary); font-weight: 500; }
 
@@ -363,7 +416,10 @@ body {
 }
 .list-card-item:last-child { border-bottom: none; }
 .list-card-item:hover { background: var(--bg-tertiary); }
-.list-card-item.highlight-item { background: #fefce8; border-left: 3px solid #f59e0b; }
+.list-card-item.highlight-item {
+    background: #FFF8E1;
+    border-left: 3px solid var(--warning);
+}
 
 .item-icon {
     width: 32px; height: 32px; border-radius: var(--radius-sm);
@@ -376,18 +432,18 @@ body {
 
 .item-content { flex: 1; min-width: 0; }
 .item-main { display: flex; align-items: center; gap: 4px; font-size: 13px; flex-wrap: wrap; }
-.item-id { font-weight: 600; color: var(--text-primary); }
+.item-id { font-weight: 700; color: var(--text-primary); }
 .item-separator { color: var(--text-tertiary); }
 .item-supplier { color: var(--text-secondary); }
-.item-amount { font-weight: 600; color: var(--text-primary); margin-left: auto; }
+.item-amount { font-weight: 700; color: var(--text-primary); margin-left: auto; }
 
 .item-details { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-tertiary); flex-wrap: wrap; }
 .item-dot { color: var(--text-tertiary); }
-.item-overdue { color: var(--danger); font-weight: 500; }
+.item-overdue { color: var(--danger); font-weight: 600; }
 
 .severity-badge {
     padding: 2px 8px; border-radius: var(--radius-full);
-    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.02em; flex-shrink: 0;
 }
 .severity-badge.severity-critical { background: var(--danger-bg); color: var(--danger); }
@@ -396,7 +452,7 @@ body {
 
 .status-badge {
     padding: 2px 8px; border-radius: var(--radius-full);
-    font-size: 10px; font-weight: 600;
+    font-size: 10px; font-weight: 700;
 }
 .status-badge.success { background: var(--success-bg); color: var(--success); }
 .status-badge.warning { background: var(--warning-bg); color: var(--warning); }
@@ -409,15 +465,15 @@ body {
 .rule-item:last-child { border-bottom: none; }
 .rule-icon {
     width: 28px; height: 28px; border-radius: var(--radius-sm);
-    background: var(--primary-bg); color: var(--primary);
+    background: var(--primary-bg); color: var(--sapBrandColor);
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; flex-shrink: 0; margin-top: 2px;
 }
-.rule-item strong { display: block; font-size: 12px; font-weight: 600; }
+.rule-item strong { display: block; font-size: 12px; font-weight: 700; color: var(--text-primary); }
 .rule-item span { font-size: 12px; color: var(--text-secondary); }
 
 /* ========================================
-   Detail Cards (Comparison)
+   Detail Cards (Comparison) — Horizon Cards
    ======================================== */
 .joule-detail-cards {
     display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;
@@ -429,7 +485,10 @@ body {
     transition: var(--transition);
 }
 .detail-card:hover { box-shadow: var(--shadow-md); }
-.detail-card.recommended { border: 2px solid var(--primary-light); box-shadow: var(--shadow-md); }
+.detail-card.recommended {
+    border: 2px solid var(--sapBrandColor);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(0, 112, 242, 0.08);
+}
 
 .detail-card-header {
     padding: 12px 16px; background: var(--bg-tertiary);
@@ -437,11 +496,11 @@ body {
 }
 
 .detail-card-title { display: flex; align-items: center; gap: 8px; }
-.detail-card-name { font-size: 16px; font-weight: 700; }
+.detail-card-name { font-size: 16px; font-weight: 700; color: var(--text-primary); }
 
 .recommended-badge {
-    font-size: 10px; font-weight: 600; padding: 2px 8px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    font-size: 10px; font-weight: 700; padding: 2px 10px;
+    background: linear-gradient(135deg, var(--jouleGradientStart), var(--jouleGradientEnd));
     color: white; border-radius: var(--radius-full);
 }
 .recommended-badge i { font-size: 8px; }
@@ -455,8 +514,8 @@ body {
 .detail-card-body { padding: 12px 16px; }
 
 .detail-section-title {
-    font-size: 11px; font-weight: 600; color: var(--text-tertiary);
-    text-transform: uppercase; letter-spacing: 0.04em;
+    font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.05em;
     padding-bottom: 8px; margin-bottom: 4px;
     border-bottom: 1px solid var(--border-light);
 }
@@ -471,7 +530,7 @@ body {
 .detail-label { color: var(--text-secondary); font-size: 12px; }
 .detail-value { font-weight: 500; color: var(--text-primary); }
 .detail-value.highlight-green { color: var(--success); font-weight: 700; }
-.detail-value.highlight-blue { color: var(--primary); font-weight: 600; }
+.detail-value.highlight-blue { color: var(--sapBrandColor); font-weight: 600; }
 
 .highlight-row {
     margin-top: 4px; padding-top: 10px !important;
@@ -482,25 +541,42 @@ body {
     margin-top: 10px; padding: 8px 12px; background: var(--success-bg);
     border-radius: var(--radius-sm); font-size: 12px; font-weight: 600;
     color: var(--success); display: flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(48, 145, 76, 0.15);
 }
 
 /* ========================================
-   Action Buttons
+   Action Buttons — SAP Fiori Button Types
    ======================================== */
 .action-buttons { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
 .action-btn {
     padding: 8px 16px; border-radius: var(--radius-full);
-    font-size: 13px; font-weight: 500; cursor: pointer;
+    font-size: 13px; font-weight: 600; cursor: pointer;
     border: 1px solid transparent; transition: var(--transition);
     display: flex; align-items: center; gap: 6px; font-family: inherit;
 }
-.action-btn.primary { background: var(--primary); color: white; }
-.action-btn.primary:hover { background: var(--primary-dark); }
-.action-btn.secondary { background: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-color); }
-.action-btn.secondary:hover { background: var(--bg-tertiary); }
-.action-btn.danger { background: var(--danger); color: white; }
-.action-btn.danger:hover { background: #b91c1c; }
+
+/* Emphasized (primary) — one per section */
+.action-btn.primary {
+    background: var(--sapBrandColor); color: white;
+    border-color: var(--sapBrandColor);
+}
+.action-btn.primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+/* Default (secondary) */
+.action-btn.secondary {
+    background: var(--bg-secondary); color: var(--text-primary);
+    border-color: var(--border-color);
+}
+.action-btn.secondary:hover { background: var(--bg-tertiary); border-color: var(--text-tertiary); }
+
+/* Reject (negative semantic) — red */
+.action-btn.danger {
+    background: var(--danger); color: white;
+    border-color: var(--danger);
+}
+.action-btn.danger:hover { background: #CC0A19; border-color: #CC0A19; }
+
 .action-btn.full-width { width: 100%; justify-content: center; margin-top: 8px; }
 
 .chip-action {
@@ -510,30 +586,31 @@ body {
     transition: var(--transition); display: flex; align-items: center; gap: 6px;
     font-family: inherit;
 }
-.chip-action:hover { background: var(--primary-bg); border-color: var(--primary-light); color: var(--primary); }
+.chip-action:hover { background: var(--primary-bg); border-color: var(--primary-light); color: var(--sapBrandColor); }
 
 /* ========================================
-   Alert Cards
+   Alert / Message Strips — SAP Message Strip
    ======================================== */
 .info-card, .success-card, .warning-card, .danger-card {
     display: flex; gap: 10px; padding: 12px 16px;
     border-radius: var(--radius-md); margin: 8px 0;
     font-size: 13px; align-items: flex-start;
+    border-left: 4px solid transparent;
 }
 
-.info-card { background: var(--info-bg); color: #155e75; }
+.info-card { background: var(--info-bg); color: #0057C7; border-left-color: var(--info); }
 .info-card i { color: var(--info); }
-.success-card { background: var(--success-bg); color: #14532d; }
+.success-card { background: var(--success-bg); color: #256F3A; border-left-color: var(--success); }
 .success-card i { color: var(--success); }
-.warning-card { background: var(--warning-bg); color: #7c2d12; }
+.warning-card { background: var(--warning-bg); color: #A45600; border-left-color: var(--warning); }
 .warning-card i { color: var(--warning); }
-.danger-card { background: var(--danger-bg); color: #7f1d1d; }
+.danger-card { background: var(--danger-bg); color: #AA0808; border-left-color: var(--danger); }
 .danger-card i { color: var(--danger); }
 
 .alert-card { border-color: var(--danger); }
 
 /* ========================================
-   Progress
+   Progress — SAP Progress Indicator
    ======================================== */
 .progress-container { margin: 16px 0; }
 
@@ -541,15 +618,17 @@ body {
     display: flex; justify-content: space-between;
     margin-bottom: 8px; font-size: 13px;
 }
-.progress-label { font-weight: 500; }
+.progress-label { font-weight: 600; color: var(--text-primary); }
 .progress-count { color: var(--text-secondary); }
 
 .progress-bar-track {
     height: 8px; background: var(--bg-tertiary); border-radius: var(--radius-full);
     overflow: hidden; margin-bottom: 12px;
+    border: 1px solid var(--border-light);
 }
 .progress-bar-fill {
-    height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent));
+    height: 100%;
+    background: linear-gradient(90deg, var(--sapBrandColor), var(--sapAccentColor5));
     border-radius: var(--radius-full); transition: width 0.4s ease;
 }
 
@@ -563,7 +642,7 @@ body {
 
 .progress-icon { width: 16px; text-align: center; }
 .progress-icon.pending { color: var(--text-tertiary); font-size: 8px; }
-.progress-icon.processing { color: var(--primary); }
+.progress-icon.processing { color: var(--sapBrandColor); }
 .progress-icon.done { color: var(--success); }
 
 /* ========================================
@@ -594,7 +673,7 @@ body {
 }
 
 /* ========================================
-   Chat Input
+   Chat Input — SAP Input with Horizon styling
    ======================================== */
 .chat-input-area {
     padding: 16px 24px 20px; background: var(--bg-secondary);
@@ -607,11 +686,15 @@ body {
 }
 
 .input-container input {
-    flex: 1; padding: 12px 16px; border: 1px solid var(--border-color);
+    flex: 1; padding: 10px 16px; border: 1px solid var(--border-color);
     border-radius: var(--radius-full); font-size: 14px;
     font-family: inherit; outline: none; transition: var(--transition);
+    background: var(--bg-secondary);
 }
-.input-container input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.input-container input:focus {
+    border-color: var(--sapBrandColor);
+    box-shadow: 0 0 0 3px rgba(0, 112, 242, 0.16);
+}
 
 .attach-btn {
     width: 36px; height: 36px; color: var(--text-tertiary);
@@ -625,7 +708,7 @@ body {
 .input-hint i { font-size: 12px; }
 
 /* ========================================
-   Scrollbar
+   Scrollbar — Subtle
    ======================================== */
 .chat-messages::-webkit-scrollbar { width: 6px; }
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
