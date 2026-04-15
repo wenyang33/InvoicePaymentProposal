@@ -408,47 +408,46 @@ body {
 
 .summary-body { padding: 8px 16px 16px; }
 
-/* List Card Items */
+/* List Card Items — SAP List Pattern */
 .list-card-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 16px; border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border-light);
     transition: var(--transition);
 }
 .list-card-item:last-child { border-bottom: none; }
 .list-card-item:hover { background: var(--bg-tertiary); }
-.list-card-item.highlight-item {
-    background: #FFF8E1;
-    border-left: 3px solid var(--warning);
-}
 
 .item-icon {
-    width: 32px; height: 32px; border-radius: var(--radius-sm);
+    width: 44px; height: 44px; border-radius: var(--radius-md);
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; font-size: 14px;
+    flex-shrink: 0; font-size: 18px;
+    background: #E6F4F2; color: #0E8074;
 }
-.item-icon.severity-critical { background: var(--danger-bg); color: var(--danger); }
-.item-icon.severity-high { background: var(--warning-bg); color: var(--warning); }
-.item-icon.severity-medium { background: var(--info-bg); color: var(--info); }
 
 .item-content { flex: 1; min-width: 0; }
-.item-main { display: flex; align-items: center; gap: 4px; font-size: 13px; flex-wrap: wrap; }
-.item-id { font-weight: 700; color: var(--text-primary); }
-.item-separator { color: var(--text-tertiary); }
-.item-supplier { color: var(--text-secondary); }
-.item-amount { font-weight: 700; color: var(--text-primary); margin-left: auto; }
+.item-id { font-weight: 700; font-size: 14px; color: var(--text-primary); display: block; }
+.item-supplier { font-size: 13px; color: var(--text-secondary); display: block; margin-top: 1px; }
+.item-due { font-size: 12px; color: var(--text-tertiary); display: block; margin-top: 1px; }
 
-.item-details { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-tertiary); flex-wrap: wrap; }
-.item-dot { color: var(--text-tertiary); }
-.item-overdue { color: var(--danger); font-weight: 600; }
-
-.severity-badge {
-    padding: 2px 8px; border-radius: var(--radius-full);
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.02em; flex-shrink: 0;
+.item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.item-exception-label { font-size: 12px; color: var(--danger); font-weight: 600; white-space: nowrap; }
+.item-detail-btn {
+    padding: 4px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 600; color: var(--text-primary); background: var(--bg-secondary);
+    cursor: pointer; transition: var(--transition); font-family: inherit; white-space: nowrap;
 }
-.severity-badge.severity-critical { background: var(--danger-bg); color: var(--danger); }
-.severity-badge.severity-high { background: var(--warning-bg); color: var(--warning); }
-.severity-badge.severity-medium { background: var(--info-bg); color: var(--info); }
+.item-detail-btn:hover { border-color: var(--sapBrandColor); color: var(--sapBrandColor); background: var(--primary-bg); }
+
+.list-card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 16px; border-top: 1px solid var(--border-light);
+}
+.list-card-footer a, .list-card-footer button {
+    font-size: 13px; font-weight: 600; color: var(--sapBrandColor);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    text-decoration: none;
+}
+.list-card-footer a:hover, .list-card-footer button:hover { text-decoration: underline; }
 
 .status-badge {
     padding: 2px 8px; border-radius: var(--radius-full);

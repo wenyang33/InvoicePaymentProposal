@@ -229,42 +229,40 @@ async function handleExceptionQuery() {
     `;
     await addBotMessage(stepsHTML, 1500);
 
+    const visibleCount = 3;
+    const totalCount = invoiceData.length;
     const tableHTML = `
         <div class="joule-list-card">
             <div class="list-card-header">
                 <div class="list-card-title">
-                    <i class="fas fa-file-invoice-dollar"></i>
                     <div>
                         <h3>Payment Exceptions</h3>
                         <span class="list-card-subtitle">Invoices requiring attention</span>
                     </div>
                 </div>
-                <span class="list-card-count">${invoiceData.length} items</span>
+                <span class="list-card-count">${visibleCount} of ${totalCount}</span>
             </div>
             <div class="list-card-body">
-                ${invoiceData.map((inv, i) => `
-                    <div class="list-card-item ${i === 0 ? 'highlight-item' : ''}">
-                        <div class="item-icon ${getSeverityClass(inv.severity)}">
-                            <i class="fas ${getSeverityIcon(inv.severity)}"></i>
+                ${invoiceData.slice(0, visibleCount).map((inv) => `
+                    <div class="list-card-item">
+                        <div class="item-icon">
+                            <i class="fas fa-file-invoice"></i>
                         </div>
                         <div class="item-content">
-                            <div class="item-main">
-                                <span class="item-id">${inv.id}</span>
-                                <span class="item-separator">—</span>
-                                <span class="item-supplier">${inv.supplier}</span>
-                                <span class="item-amount">${formatCurrency(inv.amount)}</span>
-                            </div>
-                            <div class="item-details">
-                                <span class="item-exception">${inv.exception}</span>
-                                <span class="item-dot">·</span>
-                                <span>Due ${new Date(inv.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                                <span class="item-dot">·</span>
-                                <span class="item-overdue">${inv.daysOverdue}d overdue</span>
-                            </div>
+                            <span class="item-id">${inv.id}</span>
+                            <span class="item-supplier">${inv.supplier}</span>
+                            <span class="item-due">Due ${new Date(inv.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                         </div>
-                        <span class="severity-badge ${getSeverityClass(inv.severity)}">${inv.severity}</span>
+                        <div class="item-right">
+                            <span class="item-exception-label">${inv.exception}</span>
+                            <button class="item-detail-btn" onclick="event.stopPropagation()">More Details</button>
+                        </div>
                     </div>
                 `).join('')}
+            </div>
+            <div class="list-card-footer">
+                <button onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')">Resolve</button>
+                <a href="#" onclick="event.preventDefault()">View More</a>
             </div>
         </div>
         <p>⚠️ The most severe is <strong>${invoiceData[0].id}</strong> from <strong>${invoiceData[0].supplier}</strong> for <strong>${formatCurrency(invoiceData[0].amount)}</strong> — <strong>Terms Mismatch</strong>, ${invoiceData[0].daysOverdue} days overdue. Shall I resolve it?</p>
