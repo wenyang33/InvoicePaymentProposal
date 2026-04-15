@@ -646,10 +646,10 @@ async function showFinalSummary() {
 async function handleGenericResponse() {
     const responses = [
         `<p>I can help you with payment exceptions. Try asking me about invoices that need payment exceptions, or tell me about a specific invoice you'd like to resolve.</p>
-        <div class="action-buttons"><button class="chip-action" onclick="sendSuggestion('What invoices I received in the past 10 days need payment exceptions?')"><i class="fas fa-search"></i> Find payment exceptions</button></div>`,
+        <div class="action-buttons"><button class="chip-action" onclick="sendSuggestion('What invoices I received in the past 10 days have payment exceptions?')"><i class="fas fa-search"></i> Find payment exceptions</button></div>`,
         `<p>I'm not sure I understood that. Here are some things I can help with:</p>
         <ul style="margin:8px 0;padding-left:20px;"><li>Finding invoices with payment exceptions</li><li>Resolving payment term mismatches</li><li>Creating business rules for recurring patterns</li><li>Processing batch invoice updates</li></ul>
-        <div class="action-buttons"><button class="chip-action" onclick="sendSuggestion('What invoices I received in the past 10 days need payment exceptions?')"><i class="fas fa-search"></i> Find exceptions</button></div>`
+        <div class="action-buttons"><button class="chip-action" onclick="sendSuggestion('What invoices I received in the past 10 days have payment exceptions?')"><i class="fas fa-search"></i> Find exceptions</button></div>`
     ];
     await addBotMessage(responses[Math.floor(Math.random() * responses.length)], 1000);
 }
