@@ -1,10 +1,9 @@
 /* ========================================
-   SAP Fiori Horizon Theme — Joule AI Design
-   Based on SAP Design System Guidelines v1.130
+   PayAssist AI — Chat Agent Theme
    ======================================== */
 
 /* ========================================
-   CSS Variables — SAP Horizon Morning
+   CSS Variables
    ======================================== */
 :root {
     /* SAP Brand & AI Colors */
@@ -93,7 +92,7 @@ body {
 }
 
 /* ========================================
-   SAP Shell Bar — Fiori Horizon
+   Shell Bar
    ======================================== */
 .sap-shell-bar {
     display: flex;
@@ -603,7 +602,7 @@ body {
 }
 
 /* ========================================
-   Action Buttons — SAP Fiori Button Types
+   Action Buttons
    ======================================== */
 .action-buttons { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
@@ -647,7 +646,7 @@ body {
 .chip-action:hover { background: var(--primary-bg); border-color: var(--primary-light); color: var(--sapBrandColor); }
 
 /* ========================================
-   Alert / Message Strips — SAP Message Strip
+   Alert / Message Strips
    ======================================== */
 .info-card, .success-card, .warning-card, .danger-card {
     display: flex; gap: 10px; padding: 12px 16px;
@@ -668,7 +667,7 @@ body {
 .alert-card { border-color: var(--danger); }
 
 /* ========================================
-   Progress — SAP Progress Indicator
+   Progress Indicator
    ======================================== */
 .progress-container { margin: 16px 0; }
 
@@ -731,7 +730,7 @@ body {
 }
 
 /* ========================================
-   Chat Input — SAP Input with Horizon styling
+   Chat Input
    ======================================== */
 .chat-input-area {
     padding: 16px 24px 20px; background: var(--bg-secondary);
