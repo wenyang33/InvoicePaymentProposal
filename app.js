@@ -130,6 +130,9 @@ function switchToChatView() {
     document.getElementById('landingPage').style.display = 'none';
     document.getElementById('chatView').style.display = 'flex';
     document.getElementById('chatInput').focus();
+    // Update conversation bar title
+    const convTitle = document.querySelector('.conv-title');
+    if (convTitle) convTitle.textContent = 'Payment Exceptions';
 }
 
 function sendSuggestion(text) {

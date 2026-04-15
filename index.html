@@ -10,100 +10,125 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <!-- SAP Shell Bar -->
-        <div class="sap-shell-bar">
-            <div class="shell-left">
-                <div class="sap-logo">
-                    <svg width="42" height="20" viewBox="0 0 42 20" fill="none">
-                        <rect width="42" height="20" rx="3" fill="#0070F2"/>
-                        <text x="21" y="14.5" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Arial, sans-serif">SAP</text>
-                    </svg>
-                </div>
-                <button class="shell-nav-btn">Home <i class="fas fa-chevron-down" style="font-size:9px; margin-left:4px"></i></button>
+    <!-- SAP Shell Bar (top) -->
+    <div class="sap-shell-bar">
+        <div class="shell-left">
+            <button class="shell-icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
+            <div class="sap-logo">
+                <svg width="50" height="24" viewBox="0 0 50 24" fill="none">
+                    <rect width="50" height="24" rx="3" fill="#0070F2"/>
+                    <text x="25" y="16" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Arial, sans-serif">SAP</text>
+                </svg>
             </div>
-            <div class="shell-right">
-                <div class="shell-search">
-                    <input type="text" placeholder="Search" readonly>
-                    <i class="fas fa-search"></i>
-                </div>
+            <span class="shell-app-title">Ariba</span>
+        </div>
+        <div class="shell-right">
+            <button class="shell-icon-btn" title="Search"><i class="fas fa-search"></i></button>
+            <button class="shell-icon-btn" title="Locations"><i class="fas fa-map-marker-alt"></i></button>
+            <button class="shell-icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
+            <button class="shell-icon-btn" title="Feedback"><i class="fas fa-smile"></i></button>
+            <button class="shell-icon-btn" title="Settings"><i class="fas fa-sliders-h"></i></button>
+            <div class="shell-user-avatar">
+                <i class="fas fa-user"></i>
             </div>
         </div>
-        <!-- Conversation Bar (purple) -->
-        <div class="conversation-bar">
-            <div class="conv-left">
-                <button class="conv-icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
-                <span class="conv-title">New Conversation</span>
-            </div>
-            <div class="conv-right">
-                <button class="conv-icon-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
-                <button class="conv-icon-btn" title="Full Screen"><i class="fas fa-expand"></i></button>
-                <button class="conv-icon-btn" title="Close"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
+    </div>
 
-        <!-- Landing Page (shown initially) -->
-        <div class="landing-page" id="landingPage">
-            <div class="hero-section">
-                <div class="hero-icon">
-                    <div class="sparkle sparkle-1">✦</div>
-                    <div class="sparkle sparkle-2">✦</div>
-                    <div class="diamond-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
+    <div class="app-body">
+        <!-- Left Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-nav">
+                <a class="sidebar-item" title="Home"><i class="fas fa-home"></i></a>
+                <a class="sidebar-item active" title="AI Assistant"><i class="fas fa-wand-magic-sparkles"></i></a>
+                <a class="sidebar-item has-sub" title="Sourcing"><i class="fas fa-crown"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item has-sub" title="Organization"><i class="fas fa-sitemap"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item has-sub" title="Documents"><i class="fas fa-file-lines"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item has-sub" title="Globe"><i class="fas fa-globe"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item has-sub" title="Security"><i class="fas fa-shield-halved"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item has-sub" title="Favorites"><i class="fas fa-star"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item has-sub" title="Reports"><i class="fas fa-clipboard-list"></i><span class="sub-arrow">›</span></a>
+                <a class="sidebar-item" title="Analytics"><i class="fas fa-chart-bar"></i></a>
+            </div>
+            <div class="sidebar-bottom">
+                <a class="sidebar-item add-btn" title="Add"><i class="fas fa-plus"></i></a>
+                <a class="sidebar-item" title="Users"><i class="fas fa-users"></i></a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Conversation Bar (purple) -->
+            <div class="conversation-bar">
+                <div class="conv-left">
+                    <button class="conv-icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
+                    <span class="conv-title">New Conversation</span>
+                </div>
+                <div class="conv-right">
+                    <button class="conv-icon-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="conv-icon-btn" title="Full Screen"><i class="fas fa-expand"></i></button>
+                    <button class="conv-icon-btn" title="Close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <!-- Landing Page (shown initially) -->
+            <div class="landing-page" id="landingPage">
+                <div class="hero-section">
+                    <div class="hero-icon">
+                        <div class="sparkle sparkle-1">✦</div>
+                        <div class="sparkle sparkle-2">✦</div>
+                        <div class="diamond-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="sparkle sparkle-3">✦</div>
                     </div>
-                    <div class="sparkle sparkle-3">✦</div>
+                    <p class="welcome-greeting">Hello Jane,</p>
+                    <h1 class="welcome-heading">How can I help you?</h1>
+                    <div class="welcome-subtitle">
+                        Talk to me naturally. For example, "what invoices need payment exceptions?"
+                    </div>
+                    <button class="get-started-btn" onclick="focusInput()">Get started</button>
                 </div>
-                <p class="welcome-greeting">Hello Jane,</p>
-                <h1 class="welcome-heading">How can I help you?</h1>
-                <div class="welcome-subtitle">
-                    Talk to me naturally. For example, "what invoices need payment exceptions?"
+                <div class="welcome-bottom">
+                    <div class="starter-chips">
+                        <button class="chip" onclick="startWithSuggestion('What invoices I received in the past 10 days have payment exceptions?')"><i class="fas fa-search"></i> Find payment exceptions</button>
+                        <button class="chip" onclick="startWithSuggestion('Show me overdue invoices')">
+                            <i class="fas fa-clock"></i> Overdue invoices
+                        </button>
+                        <button class="chip" onclick="startWithSuggestion('Review supplier payment terms')">
+                            <i class="fas fa-handshake"></i> Payment terms review
+                        </button>
+                        <button class="chip" onclick="startWithSuggestion('Show discount opportunities')">
+                            <i class="fas fa-percent"></i> Discount opportunities
+                        </button>
+                        <button class="chip" onclick="startWithSuggestion('Generate exception report')">
+                            <i class="fas fa-chart-bar"></i> Exception report
+                        </button>
+                    </div>
                 </div>
-                <button class="get-started-btn" onclick="focusInput()">Get started</button>
+                <div class="landing-input-area">
+                    <div class="landing-input-container">
+                        <button class="attach-icon"><i class="fas fa-paperclip"></i></button>
+                        <input type="text" id="landingInput" placeholder="Message Joule..." 
+                               onkeypress="if(event.key==='Enter') sendFromLanding()">
+                        <button class="send-btn" onclick="sendFromLanding()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="welcome-bottom">
-                <div class="starter-chips">
-                    <button class="chip" onclick="startWithSuggestion('What invoices I received in the past 10 days have payment exceptions?')"><i class="fas fa-search"></i> Find payment exceptions</button>
-                    <button class="chip" onclick="startWithSuggestion('Show me overdue invoices')">
-                        <i class="fas fa-clock"></i> Overdue invoices
-                    </button>
-                    <button class="chip" onclick="startWithSuggestion('Review supplier payment terms')">
-                        <i class="fas fa-handshake"></i> Payment terms review
-                    </button>
-                    <button class="chip" onclick="startWithSuggestion('Show discount opportunities')">
-                        <i class="fas fa-percent"></i> Discount opportunities
-                    </button>
-                    <button class="chip" onclick="startWithSuggestion('Generate exception report')">
-                        <i class="fas fa-chart-bar"></i> Exception report
-                    </button>
-                </div>
-            </div>
-            <div class="landing-input-area">
-                <div class="landing-input-container">
-                    <input type="text" id="landingInput" placeholder="Ask about payment exceptions..." 
-                           onkeypress="if(event.key==='Enter') sendFromLanding()">
-                    <button class="send-btn" onclick="sendFromLanding()">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="landing-hint"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" style="vertical-align: -1px; margin-right: 4px"><circle cx="8" cy="8" r="8" fill="#5D36FF" opacity="0.6"/><path d="M5 8.5C5 7 6.5 5 8 5s3 2 3 3.5S9.5 11 8 11 5 10 5 8.5z" fill="#fff"/></svg>PayAssist AI uses AI. Check for mistakes.</div>
-            </div>
-        </div>
 
-        <!-- Chat View (hidden initially) -->
-        <div class="chat-view" id="chatView" style="display:none">
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-area">
-                <div class="input-container">
-                    <button class="icon-btn attach-btn" title="Attach file"><i class="fas fa-paperclip"></i></button>
-                    <input type="text" id="chatInput" placeholder="Ask about payment exceptions..." 
-                           onkeypress="if(event.key==='Enter') sendMessage()">
-                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="input-hint">
-                    <i class="fas fa-info-circle"></i>
-                    Press Enter to send · AI-powered payment exception resolution
+            <!-- Chat View (hidden initially) -->
+            <div class="chat-view" id="chatView" style="display:none">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-area">
+                    <div class="input-container">
+                        <button class="attach-icon" title="Attach file"><i class="fas fa-paperclip"></i></button>
+                        <input type="text" id="chatInput" placeholder="Message Joule..." 
+                               onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
