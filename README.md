@@ -1,4 +1,4 @@
-# PayAssist AI — Invoice Payment Proposal Agent
+# Invoice Payment Proposal Agent Demo - This is for design demo purpose ONLY
 
 A conversational AI chat agent that helps Accounts Payable managers resolve invoice payment exceptions through a guided, step-by-step workflow.
 
