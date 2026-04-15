@@ -13,12 +13,9 @@ const state = {
 
 // Sample invoice data
 const invoiceData = [
-    { id: 'INV-2024-0847', supplier: 'AA Corp', amount: 78500, dueDate: '2026-04-08', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'critical', daysOverdue: 6 },
-    { id: 'INV-2024-0852', supplier: 'AA Corp', amount: 45200, dueDate: '2026-04-09', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'critical', daysOverdue: 5 },
-    { id: 'INV-2024-0861', supplier: 'AA Corp', amount: 32100, dueDate: '2026-04-10', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'high', daysOverdue: 4 },
-    { id: 'INV-2024-0839', supplier: 'Beta Industries', amount: 23400, dueDate: '2026-04-07', terms: 'Net 45', exception: 'Price Variance', severity: 'high', daysOverdue: 7 },
-    { id: 'INV-2024-0871', supplier: 'AA Corp', amount: 19800, dueDate: '2026-04-11', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'medium', daysOverdue: 3 },
-    { id: 'INV-2024-0855', supplier: 'Gamma LLC', amount: 15600, dueDate: '2026-04-06', terms: 'Net 30', exception: 'Duplicate Entry', severity: 'medium', daysOverdue: 8 },
+    { id: 'INV-2024-0847', supplier: 'AA Corp', amount: 78500, dueDate: '2026-04-08', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'critical', daysOverdue: 7 },
+    { id: 'INV-2024-0852', supplier: 'AA Corp', amount: 45200, dueDate: '2026-04-09', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'high', daysOverdue: 6 },
+    { id: 'INV-2024-0839', supplier: 'Beta Industries', amount: 23400, dueDate: '2026-04-05', terms: 'Net 45', exception: 'Overdue', severity: 'critical', daysOverdue: 10 },
 ];
 
 // Helper functions
@@ -222,7 +219,7 @@ async function handleExceptionQuery() {
                 <div class="step-number">4</div>
                 <div class="step-content">
                     <strong>Compiling Results</strong>
-                    <span>Found <strong>6 invoices</strong> with payment exceptions</span>
+                    <span>Found <strong>3 invoices</strong> with payment exceptions</span>
                 </div>
             </div>
         </div>
@@ -368,7 +365,7 @@ async function handleConfirmPaymentTerm() {
 // ========================================
 async function showBusinessRulePrompt() {
     const ruleHTML = `
-        <p>🤖 I noticed that <strong>4 out of 6 exceptions</strong> are from <strong>AA Corp</strong> with the same "Terms Mismatch" pattern. Would you like me to create a <strong>business rule</strong> to automatically handle similar cases?</p>
+        <p>🤖 I noticed that <strong>2 out of 3 exceptions</strong> are from <strong>AA Corp</strong> with the same "Terms Mismatch" pattern. Would you like me to create a <strong>business rule</strong> to automatically handle similar cases?</p>
         <div class="joule-list-card">
             <div class="list-card-header">
                 <div class="list-card-title">
@@ -418,7 +415,7 @@ async function handleConfirmBusinessRule() {
                 <div class="detail-row"><span class="detail-label">Created By</span><span class="detail-value">Jane Doe (AP Manager)</span></div>
             </div>
         </div>
-        <p>Now let me apply this rule to the remaining AA Corp invoices and process the other exceptions...</p>
+        <p>Now let me apply this rule to the remaining invoices...</p>
     `;
     await addBotMessage(ruleConfirmHTML, 1500);
     await processRemainingInvoices();
@@ -433,18 +430,15 @@ async function handleSkipBusinessRule() {
 async function processRemainingInvoices() {
     const remainingInvoices = [
         { id: 'INV-2024-0852', supplier: 'AA Corp', amount: 45200, savings: 45200 * 0.02 },
-        { id: 'INV-2024-0861', supplier: 'AA Corp', amount: 32100, savings: 32100 * 0.02 },
-        { id: 'INV-2024-0871', supplier: 'AA Corp', amount: 19800, savings: 19800 * 0.02 },
         { id: 'INV-2024-0839', supplier: 'Beta Industries', amount: 23400, savings: 0 },
-        { id: 'INV-2024-0855', supplier: 'Gamma LLC', amount: 15600, savings: 0 },
     ];
 
     const progressHTML = `
-        <p>⚙️ Processing remaining 5 invoices...</p>
+        <p>⚙️ Processing remaining 2 invoices...</p>
         <div class="progress-container">
             <div class="progress-header-row">
                 <span class="progress-label">Processing Invoices</span>
-                <span class="progress-count" id="progressCount">0 / 5</span>
+                <span class="progress-count" id="progressCount">0 / 2</span>
             </div>
             <div class="progress-bar-track"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
             <div class="progress-items" id="progressItems">
@@ -467,145 +461,19 @@ async function processRemainingInvoices() {
         icon.className = 'fas fa-check-circle progress-icon done';
         const progress = Math.round(((i + 1) / remainingInvoices.length) * 100);
         document.getElementById('progressBar').style.width = progress + '%';
-        document.getElementById('progressCount').textContent = `${i + 1} / 5`;
+        document.getElementById('progressCount').textContent = `${i + 1} / 2`;
     }
 
     await new Promise(resolve => setTimeout(resolve, 800));
-    await showNoDiscountInvoices();
-}
-
-// ========================================
-// Phase 5: No-Discount Invoices
-// ========================================
-async function showNoDiscountInvoices() {
-    state.conversationPhase = 'manual-intervention';
-    state.noDiscountStep = 0;
-
-    const alertHTML = `
-        <div class="warning-card">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div><strong>Attention:</strong> 2 invoices do <strong>not offer any early payment discount</strong>. These require your manual intervention.</div>
-        </div>
-        <div class="joule-list-card alert-card">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-exclamation-circle" style="color: var(--danger)"></i>
-                    <div><h3>No Discount Available</h3><span class="list-card-subtitle">Manual Review Required</span></div>
-                </div>
-                <span class="list-card-count">2 items</span>
-            </div>
-            <div class="list-card-body">
-                <div class="list-card-item">
-                    <div class="item-icon severity-high"><i class="fas fa-triangle-exclamation"></i></div>
-                    <div class="item-content">
-                        <div class="item-main"><span class="item-id">INV-2024-0839</span><span class="item-separator">—</span><span class="item-supplier">Beta Industries</span></div>
-                        <div class="item-details"><span>${formatCurrency(23400)}</span><span class="item-dot">·</span><span>Net 45</span><span class="item-dot">·</span><span class="item-overdue">No discount</span><span class="item-dot">·</span><span>Price Variance</span></div>
-                    </div>
-                </div>
-                <div class="list-card-item">
-                    <div class="item-icon severity-medium"><i class="fas fa-circle-info"></i></div>
-                    <div class="item-content">
-                        <div class="item-main"><span class="item-id">INV-2024-0855</span><span class="item-separator">—</span><span class="item-supplier">Gamma LLC</span></div>
-                        <div class="item-details"><span>${formatCurrency(15600)}</span><span class="item-dot">·</span><span>Net 30</span><span class="item-dot">·</span><span class="item-overdue">No discount</span><span class="item-dot">·</span><span>Duplicate Entry</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <p>Let's review them one at a time. Starting with the first one:</p>
-    `;
-    await addBotMessage(alertHTML, 1500);
-    await showNoDiscountInvoice1();
-}
-
-async function showNoDiscountInvoice1() {
-    const invoiceHTML = `
-        <p>📄 <strong>Invoice 1 of 2: INV-2024-0839</strong></p>
-        <div class="joule-list-card">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-file-invoice" style="color: var(--warning)"></i>
-                    <div><h3>INV-2024-0839</h3><span class="list-card-subtitle">Beta Industries</span></div>
-                </div>
-                <span class="status-badge warning">No Discount</span>
-            </div>
-            <div class="list-card-body summary-body">
-                <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">${formatCurrency(23400)}</span></div>
-                <div class="detail-row"><span class="detail-label">Payment Terms</span><span class="detail-value">Net 45</span></div>
-                <div class="detail-row"><span class="detail-label">Early Pay Discount</span><span class="detail-value" style="color: var(--danger); font-weight: 600;">None — 0%</span></div>
-                <div class="detail-row"><span class="detail-label">Exception Type</span><span class="detail-value">Price Variance ($1,200 over PO)</span></div>
-                <div class="detail-row"><span class="detail-label">Days Overdue</span><span class="detail-value">7 days</span></div>
-            </div>
-        </div>
-        <div class="danger-card">
-            <i class="fas fa-ban"></i>
-            <div><strong>AI Recommendation: Reject</strong> — No discount offered, and the invoice shows a price variance of $1,200 above the PO amount. Recommend rejecting and requesting a corrected invoice.</div>
-        </div>
-        <div class="action-buttons">
-            <button class="action-btn danger" onclick="sendSuggestion('Reject INV-2024-0839')"><i class="fas fa-times"></i> Reject</button>
-            <button class="action-btn secondary" onclick="sendSuggestion('Approve INV-2024-0839 anyway')"><i class="fas fa-check"></i> Approve Anyway</button>
-        </div>
-    `;
-    await addBotMessage(invoiceHTML, 2000);
-}
-
-async function showNoDiscountInvoice2() {
-    const invoiceHTML = `
-        <p>📄 <strong>Invoice 2 of 2: INV-2024-0855</strong></p>
-        <div class="joule-list-card">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-file-invoice" style="color: var(--warning)"></i>
-                    <div><h3>INV-2024-0855</h3><span class="list-card-subtitle">Gamma LLC</span></div>
-                </div>
-                <span class="status-badge warning">No Discount</span>
-            </div>
-            <div class="list-card-body summary-body">
-                <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">${formatCurrency(15600)}</span></div>
-                <div class="detail-row"><span class="detail-label">Payment Terms</span><span class="detail-value">Net 30</span></div>
-                <div class="detail-row"><span class="detail-label">Early Pay Discount</span><span class="detail-value" style="color: var(--danger); font-weight: 600;">None — 0%</span></div>
-                <div class="detail-row"><span class="detail-label">Exception Type</span><span class="detail-value">Duplicate Entry (matches INV-2024-0821)</span></div>
-                <div class="detail-row"><span class="detail-label">Days Overdue</span><span class="detail-value">8 days</span></div>
-            </div>
-        </div>
-        <div class="danger-card">
-            <i class="fas fa-ban"></i>
-            <div><strong>AI Recommendation: Reject</strong> — No discount offered, and this is a duplicate of INV-2024-0821 which has already been paid. Recommend rejecting to avoid double payment.</div>
-        </div>
-        <div class="action-buttons">
-            <button class="action-btn danger" onclick="sendSuggestion('Reject INV-2024-0855')"><i class="fas fa-times"></i> Reject</button>
-            <button class="action-btn secondary" onclick="sendSuggestion('Approve INV-2024-0855 anyway')"><i class="fas fa-check"></i> Approve Anyway</button>
-        </div>
-    `;
-    await addBotMessage(invoiceHTML, 2000);
-}
-
-async function handleRejectInvoice1() {
-    state.noDiscountStep = 1;
-    await addBotMessage(`<div class="danger-card"><i class="fas fa-times-circle"></i><div><strong>INV-2024-0839</strong> rejected — Beta Industries · ${formatCurrency(23400)} · Supplier notified to submit corrected invoice.</div></div><p>Now let's review the second invoice...</p>`, 1500);
-    await showNoDiscountInvoice2();
-}
-
-async function handleRejectInvoice2() {
-    state.noDiscountStep = 2;
-    await addBotMessage(`<div class="danger-card"><i class="fas fa-times-circle"></i><div><strong>INV-2024-0855</strong> rejected — Gamma LLC · ${formatCurrency(15600)} · Marked as duplicate, no further action needed.</div></div>`, 1500);
     await showFinalSummary();
 }
 
-async function handleApproveInvoice1() {
-    state.noDiscountStep = 1;
-    await addBotMessage(`<div class="success-card"><i class="fas fa-check-circle"></i><div><strong>INV-2024-0839</strong> approved despite no discount. Proceeding to the next invoice...</div></div>`, 1500);
-    await showNoDiscountInvoice2();
-}
-
-async function handleApproveInvoice2() {
-    state.noDiscountStep = 2;
-    await addBotMessage(`<div class="success-card"><i class="fas fa-check-circle"></i><div><strong>INV-2024-0855</strong> approved despite no discount.</div></div>`, 1500);
-    await showFinalSummary();
-}
-
+// ========================================
+// Phase 5: Final Summary
+// ========================================
 async function showFinalSummary() {
     state.conversationPhase = 'completed';
-    const totalSavings = (45200 + 32100 + 19800 + 78500) * 0.02;
+    const totalSavings = (78500 + 45200) * 0.02;
 
     const summaryHTML = `
         <p>🎉 <strong>All done!</strong> Here's the complete session summary:</p>
@@ -618,19 +486,18 @@ async function showFinalSummary() {
                 <span class="status-badge success">Complete</span>
             </div>
             <div class="list-card-body summary-body">
-                <div class="detail-row"><span class="detail-label">Total Exceptions Processed</span><span class="detail-value">6</span></div>
-                <div class="detail-row"><span class="detail-label">Resolved — Net 30 Applied</span><span class="detail-value" style="color: var(--success)">4 invoices</span></div>
-                <div class="detail-row"><span class="detail-label">Auto-Resolved (Business Rule)</span><span class="detail-value">3</span></div>
-                <div class="detail-row"><span class="detail-label">Rejected (No Discount)</span><span class="detail-value" style="color: var(--danger)">2 invoices</span></div>
+                <div class="detail-row"><span class="detail-label">Total Exceptions Processed</span><span class="detail-value">3</span></div>
+                <div class="detail-row"><span class="detail-label">Resolved — Net 30 Applied</span><span class="detail-value" style="color: var(--success)">2 invoices (AA Corp)</span></div>
+                <div class="detail-row"><span class="detail-label">Auto-Resolved (Business Rule)</span><span class="detail-value">1</span></div>
+                <div class="detail-row"><span class="detail-label">Overdue — Escalated</span><span class="detail-value" style="color: var(--danger)">1 invoice (Beta Industries)</span></div>
                 <div class="detail-row"><span class="detail-label">Business Rule Created</span><span class="detail-value">BR-2026-0142</span></div>
-                <div class="detail-row"><span class="detail-label">Total Invoice Amount Processed</span><span class="detail-value">${formatCurrency(78500 + 45200 + 32100 + 19800)}</span></div>
-                <div class="detail-row"><span class="detail-label">Total Amount Rejected</span><span class="detail-value" style="color: var(--danger)">${formatCurrency(23400 + 15600)}</span></div>
+                <div class="detail-row"><span class="detail-label">Total Invoice Amount Processed</span><span class="detail-value">${formatCurrency(78500 + 45200 + 23400)}</span></div>
                 <div class="detail-row highlight-row"><span class="detail-label">Total Discount Savings</span><span class="detail-value highlight-green">${formatCurrency(totalSavings)}</span></div>
             </div>
         </div>
         <div class="success-card">
             <i class="fas fa-check-circle"></i>
-            <div>Business rule <strong>BR-2026-0142</strong> is active. Rejection notices sent to <strong>Beta Industries</strong>; duplicate for <strong>Gamma LLC</strong> archived.</div>
+            <div>Business rule <strong>BR-2026-0142</strong> is active. Overdue invoice <strong>INV-2024-0839</strong> from <strong>Beta Industries</strong> has been escalated for review.</div>
         </div>
         <p>Is there anything else you'd like me to help with?</p>
         <div class="action-buttons">
