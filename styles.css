@@ -136,35 +136,40 @@ body {
     overflow: hidden;
 }
 
-/* Hero with Joule gradient */
+/* Hero — solid purple */
 .hero-section {
     flex: 1;
-    background: linear-gradient(180deg, #354A5F 0%, #4A6A8A 30%, #7994B0 60%, #A8BDD0 100%);
+    background: #7B2FBE;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    min-height: 280px;
+    min-height: 320px;
+    padding: 40px 24px 32px;
 }
 
-.hero-icon { position: relative; display: flex; align-items: center; justify-content: center; }
+.hero-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+}
 
 .diamond-icon {
-    width: 84px; height: 84px;
-    background: white;
-    border-radius: 22px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 20px;
     transform: rotate(45deg);
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 32px rgba(0, 112, 242, 0.2);
+    backdrop-filter: blur(8px);
 }
 
 .diamond-icon i {
     transform: rotate(-45deg);
-    font-size: 30px;
-    background: linear-gradient(135deg, var(--jouleGradientStart), var(--jouleGradientEnd));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 28px;
+    color: white;
 }
 
 .sparkle {
@@ -180,89 +185,95 @@ body {
     50% { transform: translateY(-5px) scale(1.2); opacity: 1; }
 }
 
-.welcome-section {
-    padding: 0 24px;
-    background: linear-gradient(180deg, #A8BDD0 0%, #D2DDE6 12%, var(--bg-primary) 35%);
-    text-align: left;
-    max-width: 100%;
-}
-
 .welcome-greeting {
-    font-size: 16px; color: var(--text-inverse); font-weight: 400;
-    padding-top: 24px; margin-left: calc(50% - 340px);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    font-size: 16px; color: rgba(255,255,255,0.85); font-weight: 400;
+    margin: 0 0 4px 0;
+    align-self: flex-start;
+    margin-left: calc(50% - 280px);
 }
 
 .welcome-heading {
-    font-size: 28px; font-weight: 700; margin-bottom: 12px;
-    margin-left: calc(50% - 340px); color: var(--text-inverse);
-    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-size: 28px; font-weight: 700; margin: 0 0 16px 0;
+    color: white;
+    align-self: flex-start;
+    margin-left: calc(50% - 280px);
 }
 
 .welcome-subtitle {
-    font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;
-    padding: 10px 16px; background: rgba(255,255,255,0.85);
+    font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 20px;
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.12);
     border-radius: var(--radius-full); display: inline-block;
-    margin-left: calc(50% - 340px); backdrop-filter: blur(4px);
-    border: 1px solid var(--border-color);
+    align-self: flex-start;
+    margin-left: calc(50% - 280px);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .get-started-btn {
-    margin-left: calc(50% - 340px); margin-bottom: 16px;
+    align-self: flex-start;
+    margin-left: calc(50% - 280px);
     padding: 8px 24px;
-    background: var(--sapBrandColor);
+    background: transparent;
     color: white;
-    border: none;
+    border: 1.5px solid rgba(255,255,255,0.6);
     border-radius: var(--radius-full);
     font-size: 13px; font-weight: 600; cursor: pointer;
     transition: var(--transition); display: block;
     font-family: inherit;
 }
-.get-started-btn:hover { background: var(--primary-dark); }
+.get-started-btn:hover { background: rgba(255,255,255,0.15); border-color: white; }
+
+/* Bottom section — chips on white */
+.welcome-bottom {
+    padding: 20px 24px 8px;
+    background: var(--bg-primary);
+    display: flex;
+    justify-content: center;
+}
 
 .starter-chips {
     display: flex; flex-wrap: wrap; gap: 8px;
-    margin-left: calc(50% - 340px); padding-bottom: 20px;
+    justify-content: center;
 }
 
 .chip {
-    padding: 6px 14px; border: 1px solid var(--border-color);
-    background: var(--bg-secondary); border-radius: var(--radius-full);
-    font-size: 12px; color: var(--text-secondary); cursor: pointer;
+    padding: 7px 16px; border: 1.5px solid #7B2FBE;
+    background: transparent; border-radius: var(--radius-full);
+    font-size: 12px; color: #7B2FBE; cursor: pointer;
     transition: var(--transition); display: flex; align-items: center; gap: 6px;
-    font-family: inherit;
+    font-family: inherit; font-weight: 500;
 }
-.chip:hover { background: var(--primary-bg); border-color: var(--primary-light); color: var(--primary); }
-.chip i { font-size: 11px; color: var(--sapBrandColor); }
+.chip:hover { background: rgba(123,47,190,0.08); }
+.chip i { font-size: 11px; color: #7B2FBE; }
 
 /* Landing Input */
 .landing-input-area {
     padding: 12px 24px 16px; background: var(--bg-primary);
-    border-top: 1px solid var(--border-color);
 }
 
 .landing-input-container {
     display: flex; align-items: center; gap: 8px;
-    max-width: 700px; margin: 0 auto;
+    max-width: 600px; margin: 0 auto;
 }
 
 .landing-input-container input {
-    flex: 1; padding: 10px 16px; border: 1px solid var(--border-color);
+    flex: 1; padding: 10px 16px; border: 1.5px solid #7B2FBE;
     border-radius: var(--radius-full); font-size: 14px; font-family: inherit;
-    outline: none; transition: var(--transition); background: var(--bg-secondary);
+    outline: none; transition: var(--transition); background: var(--bg-primary);
+    color: var(--text-primary);
 }
 .landing-input-container input:focus {
-    border-color: var(--sapBrandColor);
-    box-shadow: 0 0 0 3px rgba(0, 112, 242, 0.16);
+    border-color: #7B2FBE;
+    box-shadow: 0 0 0 3px rgba(123, 47, 190, 0.16);
 }
 
 .send-btn {
     width: 40px; height: 40px; border: none; border-radius: var(--radius-full);
-    background: var(--sapBrandColor); color: white; cursor: pointer;
+    background: #7B2FBE; color: white; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: var(--transition); flex-shrink: 0;
 }
-.send-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+.send-btn:hover { background: #6A28A6; transform: scale(1.05); }
 
 .landing-hint {
     text-align: center; font-size: 11px; color: var(--text-tertiary); margin-top: 8px;
