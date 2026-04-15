@@ -101,8 +101,9 @@ body {
     justify-content: space-between;
     padding: 0 16px;
     height: 44px;
-    background: var(--bg-shell);
+    background: #FFFFFF;
     border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid #E0E0E0;
     flex-shrink: 0;
 }
 
@@ -111,27 +112,28 @@ body {
 .sap-logo { display: flex; align-items: center; }
 
 .shell-nav-btn {
-    background: none; border: none; color: rgba(255,255,255,0.9);
+    background: none; border: none; color: #32363A;
     font-size: 13px; font-weight: 500; cursor: pointer;
     font-family: inherit; display: flex; align-items: center;
     padding: 4px 8px; border-radius: var(--radius-sm);
     transition: var(--transition);
 }
-.shell-nav-btn:hover { background: rgba(255,255,255,0.1); }
+.shell-nav-btn:hover { background: #F0F0F0; }
 
 .shell-search {
     position: relative; display: flex; align-items: center;
 }
 .shell-search input {
-    width: 200px; padding: 5px 30px 5px 10px;
-    border: 1px solid rgba(255,255,255,0.25); border-radius: var(--radius-sm);
-    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
-    font-size: 12px; font-family: inherit; outline: none;
+    width: 220px; padding: 6px 32px 6px 12px;
+    border: 1px solid #BFBFBF; border-radius: var(--radius-sm);
+    background: #FFFFFF; color: #32363A;
+    font-size: 13px; font-family: inherit; outline: none;
     transition: var(--transition);
 }
-.shell-search input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.12); }
+.shell-search input::placeholder { color: #8C8C8C; }
+.shell-search input:focus { border-color: var(--sapBrandColor); box-shadow: 0 0 0 2px rgba(0,112,242,0.15); }
 .shell-search i {
-    position: absolute; right: 8px; font-size: 12px; color: rgba(255,255,255,0.5);
+    position: absolute; right: 10px; font-size: 13px; color: #6A6A6A;
     pointer-events: none;
 }
 
