@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayAssist AI — Invoice Payment Proposal Agent</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <button class="icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
+                <span class="brand-title">PayAssist AI</span>
+            </div>
+            <div class="top-bar-right">
+                <button class="icon-btn" title="Full Screen"><i class="fas fa-expand"></i></button>
+                <button class="icon-btn" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <!-- Landing Page (shown initially) -->
+        <div class="landing-page" id="landingPage">
+            <div class="hero-section">
+                <div class="hero-icon">
+                    <div class="sparkle sparkle-1">✦</div>
+                    <div class="sparkle sparkle-2">✦</div>
+                    <div class="diamond-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="sparkle sparkle-3">✦</div>
+                </div>
+            </div>
+            <div class="welcome-section">
+                <p class="welcome-greeting">Hello Jane,</p>
+                <h1 class="welcome-heading">How can I help you?</h1>
+                <div class="welcome-subtitle">
+                    Talk to me naturally. For example, "what invoices need payment exceptions?"
+                </div>
+                <button class="get-started-btn" onclick="focusInput()">Get started</button>
+                <div class="starter-chips">
+                    <button class="chip" onclick="startWithSuggestion('What invoices need payment exceptions for the past 10 days?')">
+                        <i class="fas fa-search"></i> Find payment exceptions
+                    </button>
+                    <button class="chip" onclick="startWithSuggestion('Show me overdue invoices')">
+                        <i class="fas fa-clock"></i> Overdue invoices
+                    </button>
+                    <button class="chip" onclick="startWithSuggestion('Review supplier payment terms')">
+                        <i class="fas fa-handshake"></i> Payment terms review
+                    </button>
+                    <button class="chip" onclick="startWithSuggestion('Show discount opportunities')">
+                        <i class="fas fa-percent"></i> Discount opportunities
+                    </button>
+                    <button class="chip" onclick="startWithSuggestion('Generate exception report')">
+                        <i class="fas fa-chart-bar"></i> Exception report
+                    </button>
+                </div>
+            </div>
+            <div class="landing-input-area">
+                <div class="landing-input-container">
+                    <input type="text" id="landingInput" placeholder="Ask about payment exceptions..." 
+                           onkeypress="if(event.key==='Enter') sendFromLanding()">
+                    <button class="send-btn" onclick="sendFromLanding()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="landing-hint">PayAssist AI uses AI. Verify results.</div>
+            </div>
+        </div>
+
+        <!-- Chat View (hidden initially) -->
+        <div class="chat-view" id="chatView" style="display:none">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <button class="icon-btn attach-btn" title="Attach file"><i class="fas fa-paperclip"></i></button>
+                    <input type="text" id="chatInput" placeholder="Ask about payment exceptions..." 
+                           onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-hint">
+                    <i class="fas fa-info-circle"></i>
+                    Press Enter to send · AI-powered payment exception resolution
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
