@@ -93,9 +93,9 @@ body {
 }
 
 /* ========================================
-   Shell Bar — SAP Fiori Horizon
+   SAP Shell Bar — Fiori Horizon
    ======================================== */
-.top-bar {
+.sap-shell-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -106,25 +106,71 @@ body {
     flex-shrink: 0;
 }
 
-.top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 8px; }
+.shell-left, .shell-right { display: flex; align-items: center; gap: 12px; }
 
-.brand-title {
-    color: white;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.sap-logo { display: flex; align-items: center; }
+
+.shell-nav-btn {
+    background: none; border: none; color: rgba(255,255,255,0.9);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    font-family: inherit; display: flex; align-items: center;
+    padding: 4px 8px; border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+.shell-nav-btn:hover { background: rgba(255,255,255,0.1); }
+
+.shell-search {
+    position: relative; display: flex; align-items: center;
+}
+.shell-search input {
+    width: 200px; padding: 5px 30px 5px 10px;
+    border: 1px solid rgba(255,255,255,0.25); border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
+    font-size: 12px; font-family: inherit; outline: none;
+    transition: var(--transition);
+}
+.shell-search input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.12); }
+.shell-search i {
+    position: absolute; right: 8px; font-size: 12px; color: rgba(255,255,255,0.5);
+    pointer-events: none;
 }
 
-.icon-btn {
+/* ========================================
+   Conversation Bar — Purple
+   ======================================== */
+.conversation-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    height: 40px;
+    background: #7B2FBE;
+    flex-shrink: 0;
+}
+
+.conv-left, .conv-right { display: flex; align-items: center; gap: 6px; }
+
+.conv-title {
+    color: white; font-size: 13px; font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.conv-icon-btn {
     width: 32px; height: 32px; border: none; background: transparent;
     color: rgba(255,255,255,0.85); border-radius: var(--radius-sm);
     cursor: pointer; display: flex; align-items: center; justify-content: center;
     transition: var(--transition); font-size: 14px;
 }
-.icon-btn:hover { background: rgba(255,255,255,0.12); color: white; }
+.conv-icon-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+
+/* Generic icon button (chat area) */
+.icon-btn {
+    width: 32px; height: 32px; border: none; background: transparent;
+    color: var(--text-tertiary); border-radius: var(--radius-sm);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: var(--transition); font-size: 14px;
+}
+.icon-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
 
 /* ========================================
    Landing Page — Joule AI Welcome

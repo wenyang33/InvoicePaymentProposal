@@ -11,15 +11,34 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <button class="icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
-                <span class="brand-title"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align: middle"><circle cx="8" cy="8" r="8" fill="url(#jouleGrad)"/><path d="M5 8.5C5 7 6.5 5 8 5s3 2 3 3.5S9.5 11 8 11 5 10 5 8.5z" fill="#fff" opacity="0.9"/><defs><linearGradient id="jouleGrad" x1="0" y1="0" x2="16" y2="16"><stop stop-color="#5D36FF"/><stop offset="1" stop-color="#A100C2"/></linearGradient></defs></svg> PayAssist AI</span>
+        <!-- SAP Shell Bar -->
+        <div class="sap-shell-bar">
+            <div class="shell-left">
+                <div class="sap-logo">
+                    <svg width="42" height="20" viewBox="0 0 42 20" fill="none">
+                        <rect width="42" height="20" rx="3" fill="#0070F2"/>
+                        <text x="21" y="14.5" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Arial, sans-serif">SAP</text>
+                    </svg>
+                </div>
+                <button class="shell-nav-btn">Home <i class="fas fa-chevron-down" style="font-size:9px; margin-left:4px"></i></button>
             </div>
-            <div class="top-bar-right">
-                <button class="icon-btn" title="Full Screen"><i class="fas fa-expand"></i></button>
-                <button class="icon-btn" title="Close"><i class="fas fa-times"></i></button>
+            <div class="shell-right">
+                <div class="shell-search">
+                    <input type="text" placeholder="Search" readonly>
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Conversation Bar (purple) -->
+        <div class="conversation-bar">
+            <div class="conv-left">
+                <button class="conv-icon-btn" title="Menu"><i class="fas fa-bars"></i></button>
+                <span class="conv-title">New Conversation</span>
+            </div>
+            <div class="conv-right">
+                <button class="conv-icon-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
+                <button class="conv-icon-btn" title="Full Screen"><i class="fas fa-expand"></i></button>
+                <button class="conv-icon-btn" title="Close"><i class="fas fa-times"></i></button>
             </div>
         </div>
 
