@@ -5,17 +5,27 @@
 // State management
 const state = {
     currentStep: 0,
-    conversationPhase: 'initial', // initial, showing-exceptions, resolve-invoice, business-rule, processing
+    conversationPhase: 'initial', // initial, showing-exceptions, resolve-invoice, business-rule, processing, manual-intervention, completed
     isTyping: false,
     processedInvoices: 0,
-    totalInvoices: 0
+    totalInvoices: 0,
+    manualStep: 0,       // tracks which flagged invoice (0 or 1) in manual intervention
+    rejectedCount: 0,    // how many invoices user rejected
+    approvedNoDiscount: 0 // how many no-discount invoices user approved anyway
 };
 
-// Sample invoice data
+// Sample invoice data (10 invoices, first 3 shown in list)
 const invoiceData = [
-    { id: 'INV-2024-0847', supplier: 'AA Corp', amount: 78500, dueDate: '2026-04-08', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'critical', daysOverdue: 7 },
-    { id: 'INV-2024-0852', supplier: 'AA Corp', amount: 45200, dueDate: '2026-04-09', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'high', daysOverdue: 6 },
+    { id: 'INV-2024-0847', supplier: 'AA Corp', amount: 78500, dueDate: '2026-04-22', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'critical', daysUntilDue: 7 },
+    { id: 'INV-2024-0852', supplier: 'AA Corp', amount: 45200, dueDate: '2026-04-23', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'high', daysUntilDue: 8 },
     { id: 'INV-2024-0839', supplier: 'Beta Industries', amount: 23400, dueDate: '2026-04-05', terms: 'Net 45', exception: 'Overdue', severity: 'critical', daysOverdue: 10 },
+    { id: 'INV-2024-0861', supplier: 'AA Corp', amount: 32100, dueDate: '2026-04-24', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'high', daysUntilDue: 9 },
+    { id: 'INV-2024-0858', supplier: 'AA Corp', amount: 56800, dueDate: '2026-04-25', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'high', daysUntilDue: 10 },
+    { id: 'INV-2024-0863', supplier: 'Gamma Tech', amount: 41300, dueDate: '2026-04-21', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'medium', daysUntilDue: 6 },
+    { id: 'INV-2024-0870', supplier: 'AA Corp', amount: 28900, dueDate: '2026-04-26', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'medium', daysUntilDue: 11 },
+    { id: 'INV-2024-0874', supplier: 'Delta Supply', amount: 19700, dueDate: '2026-04-20', terms: 'Net 30', exception: 'Terms Mismatch', severity: 'medium', daysUntilDue: 5 },
+    { id: 'INV-2024-0881', supplier: 'Epsilon Ltd', amount: 67200, dueDate: '2026-04-28', terms: 'Net 60', exception: 'No Discount Available', severity: 'high', daysUntilDue: 13, noDiscount: true },
+    { id: 'INV-2024-0885', supplier: 'Zeta Group', amount: 34500, dueDate: '2026-04-27', terms: 'Net 60', exception: 'No Discount Available', severity: 'medium', daysUntilDue: 12, noDiscount: true },
 ];
 
 // Helper functions
@@ -174,14 +184,10 @@ function sendUserMessage(text) {
             handleSkipBusinessRule();
         } else { handleGenericResponse(); }
     } else if (state.conversationPhase === 'manual-intervention') {
-        if (lowerText.includes('reject') && (lowerText.includes('0839') || state.noDiscountStep === 0)) {
-            handleRejectInvoice1();
-        } else if (lowerText.includes('reject') && (lowerText.includes('0855') || state.noDiscountStep === 1)) {
-            handleRejectInvoice2();
-        } else if (lowerText.includes('approve') && state.noDiscountStep === 0) {
-            handleApproveInvoice1();
-        } else if (lowerText.includes('approve') && state.noDiscountStep === 1) {
-            handleApproveInvoice2();
+        if (lowerText.includes('reject')) {
+            handleRejectInvoice();
+        } else if (lowerText.includes('approve')) {
+            handleApproveInvoice();
         } else { handleGenericResponse(); }
     } else {
         handleGenericResponse();
@@ -201,10 +207,10 @@ async function handleExceptionQuery() {
         <div class="processing-card" id="processingCard">
             <div class="processing-bar-track"><div class="processing-bar-fill" id="processingBarFill"></div></div>
             <div class="processing-steps">
-                <div class="processing-step" id="pStep0" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Filtering by date range (Apr 4 – Apr 14, 2026)</span><span class="processing-chevron">›</span></div>
+                <div class="processing-step" id="pStep0" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Filtering by date range (Apr 5 – Apr 25, 2026)</span><span class="processing-chevron">›</span></div>
                 <div class="processing-step" id="pStep1" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Identifying payment exceptions</span><span class="processing-chevron">›</span></div>
                 <div class="processing-step" id="pStep2" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Severity assessment &amp; ranking</span><span class="processing-chevron">›</span></div>
-                <div class="processing-step" id="pStep3" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Compiling results — <strong>3 invoices</strong> found</span><span class="processing-chevron">›</span></div>
+                <div class="processing-step" id="pStep3" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Compiling results — <strong>${totalCount} invoices</strong> found</span><span class="processing-chevron">›</span></div>
             </div>
         </div>
         <div id="invoiceResultsSection" style="opacity:0; max-height:0; overflow:hidden; transition: opacity 0.5s ease, max-height 0.6s ease;">
@@ -221,7 +227,8 @@ async function handleExceptionQuery() {
                 </div>
                 <div class="list-card-footer"><button onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')">Resolve</button><a href="#" onclick="event.preventDefault()">View More</a></div>
             </div>
-            <p>⚠️ The most severe is <strong>${invoiceData[0].id}</strong> from <strong>${invoiceData[0].supplier}</strong> for <strong>${formatCurrency(invoiceData[0].amount)}</strong> — <strong>Terms Mismatch</strong>, ${invoiceData[0].daysOverdue} days overdue. Shall I resolve it?</p>
+            <p class="section-header">Recommendation</p>
+            <p>The most critical exception is <strong>${invoiceData[0].id}</strong> from <strong>${invoiceData[0].supplier}</strong> for <strong>${formatCurrency(invoiceData[0].amount)}</strong> — a <strong>Terms Mismatch</strong>, due in ${invoiceData[0].daysUntilDue} days. I recommend resolving this one first.</p>
             <div class="action-buttons">
                 <button class="action-btn primary" onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')"><i class="fas fa-wrench"></i> Yes, resolve it</button>
                 <button class="action-btn secondary" onclick="sendSuggestion('Show me more details')"><i class="fas fa-info-circle"></i> More details</button>
@@ -255,8 +262,9 @@ async function handleResolveMostSevere() {
     state.conversationPhase = 'resolve-invoice';
 
     const comparisonHTML = `
-        <p>📊 Analyzing payment terms for <strong>INV-2024-0847</strong> from <strong>AA Corp</strong> (${formatCurrency(78500)}).</p>
-        <p>I found a <strong>terms mismatch</strong> — submitted under <em>Net 45</em>, but the PO specifies <em>Net 30</em>.</p>
+        <p>Analyzing payment terms for <strong>INV-2024-0847</strong> from <strong>AA Corp</strong> (${formatCurrency(78500)}).</p>
+        <p class="section-header">Analysis</p>
+        <p>A <strong>terms mismatch</strong> was found — the invoice was submitted under <em>Net 45</em>, but the PO specifies <em>Net 30</em>. Two resolution options are available:</p>
         <div class="joule-detail-cards">
             <div class="detail-card recommended">
                 <div class="detail-card-header">
@@ -292,7 +300,8 @@ async function handleResolveMostSevere() {
                 </div>
             </div>
         </div>
-        <p>💡 <strong>Recommendation:</strong> <strong>Net 30</strong> with 2% discount saves <strong>${formatCurrency(78500 * 0.02)}</strong> vs ${formatCurrency(78500 * 0.01)} with Net 45. The 10-day window fits the current processing timeline.</p>
+        <p class="section-header">Recommendation</p>
+        <p><strong>Net 30</strong> with 2% discount saves <strong>${formatCurrency(78500 * 0.02)}</strong> vs ${formatCurrency(78500 * 0.01)} with Net 45. The 10-day discount window fits the current processing timeline.</p>
     `;
     await addBotMessage(comparisonHTML, 2000);
 }
@@ -315,22 +324,31 @@ async function handleConfirmPaymentTerm() {
     state.conversationPhase = 'business-rule';
 
     const confirmHTML = `
-        <p>✅ <strong>Confirmed!</strong> Invoice <strong>INV-2024-0847</strong> has been updated:</p>
-        <div class="joule-list-card compact">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-check-circle" style="color: var(--success)"></i>
-                    <div><h3>Resolution Applied</h3><span class="list-card-subtitle">INV-2024-0847</span></div>
-                </div>
-                <span class="status-badge success">✓ Done</span>
+        <p><strong>Confirmed.</strong> Invoice <strong>INV-2024-0847</strong> has been updated with the selected payment terms.</p>
+        <div class="reference-card">
+            <div class="ref-card-header">
+                <a class="ref-card-title">Resolution Applied — INV-2024-0847</a>
+                <span class="ref-card-status success">Done</span>
             </div>
-            <div class="list-card-body summary-body">
-                <div class="detail-row"><span class="detail-label">Supplier</span><span class="detail-value">AA Corp</span></div>
-                <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">${formatCurrency(78500)}</span></div>
-                <div class="detail-row"><span class="detail-label">Payment Terms</span><span class="detail-value">Net 30</span></div>
-                <div class="detail-row"><span class="detail-label">Discount Applied</span><span class="detail-value">2% (10-day window)</span></div>
-                <div class="detail-row highlight-row"><span class="detail-label">Amount Saved</span><span class="detail-value highlight-green">${formatCurrency(78500 * 0.02)}</span></div>
+            <div class="ref-card-subtitle">Supplier: AA Corp</div>
+            <div class="ref-card-subtitle">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Invoice Amount</div>
+                <div class="ref-card-field-value">${formatCurrency(78500)}</div>
             </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Payment Terms</div>
+                <div class="ref-card-field-value">Net 30</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Discount Applied</div>
+                <div class="ref-card-field-value">2% (10-day window)</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Amount Saved</div>
+                <div class="ref-card-field-value highlight-green">${formatCurrency(78500 * 0.02)}</div>
+            </div>
+            <div class="ref-card-footer"><a href="#" onclick="event.preventDefault()">View Invoice Details</a></div>
         </div>
     `;
     await addBotMessage(confirmHTML, 1500);
@@ -342,22 +360,38 @@ async function handleConfirmPaymentTerm() {
 // ========================================
 async function showBusinessRulePrompt() {
     const ruleHTML = `
-        <p>🤖 I noticed that <strong>2 out of 3 exceptions</strong> are from <strong>AA Corp</strong> with the same "Terms Mismatch" pattern. Would you like me to create a <strong>business rule</strong> to automatically handle similar cases?</p>
-        <div class="joule-list-card">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-cog"></i>
-                    <div><h3>Proposed Business Rule</h3><span class="list-card-subtitle">Auto-resolve AA Corp terms mismatches</span></div>
-                </div>
+        <p>I noticed that <strong>7 out of 10 exceptions</strong> follow the same "Terms Mismatch" pattern. Would you like me to create a <strong>business rule</strong> to automatically apply Net 30 with early payment discount to matching invoices?</p>
+        <div class="reference-card">
+            <div class="ref-card-header">
+                <a class="ref-card-title">Proposed Business Rule</a>
+                <span class="ref-card-status">Draft</span>
             </div>
-            <div class="list-card-body">
-                <div class="rule-item"><div class="rule-icon"><i class="fas fa-building"></i></div><div><strong>Supplier</strong><span>AA Corp (and subsidiaries)</span></div></div>
-                <div class="rule-item"><div class="rule-icon"><i class="fas fa-tag"></i></div><div><strong>Exception Type</strong><span>Terms Mismatch (Net 30 vs Net 45)</span></div></div>
-                <div class="rule-item"><div class="rule-icon"><i class="fas fa-gavel"></i></div><div><strong>Action</strong><span>Auto-select Net 30 with 2% early payment discount</span></div></div>
-                <div class="rule-item"><div class="rule-icon"><i class="fas fa-clock"></i></div><div><strong>Discount Window</strong><span>10 days from invoice date</span></div></div>
-                <div class="rule-item"><div class="rule-icon"><i class="fas fa-dollar-sign"></i></div><div><strong>Threshold</strong><span>Invoices up to $100,000</span></div></div>
-                <div class="rule-item"><div class="rule-icon"><i class="fas fa-shield-alt"></i></div><div><strong>Approval</strong><span>Auto-apply (notify AP Manager)</span></div></div>
+            <div class="ref-card-subtitle">Auto-resolve Terms Mismatch exceptions with early payment discount</div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Supplier</div>
+                <div class="ref-card-field-value">All suppliers with eligible discount terms</div>
             </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Exception Type</div>
+                <div class="ref-card-field-value">Terms Mismatch (Net 30 vs Net 45)</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Action</div>
+                <div class="ref-card-field-value">Auto-select Net 30 with 2% early payment discount</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Discount Window</div>
+                <div class="ref-card-field-value">10 days from invoice date</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Threshold</div>
+                <div class="ref-card-field-value">Invoices up to $100,000</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Approval</div>
+                <div class="ref-card-field-value">Auto-apply (notify AP Manager)</div>
+            </div>
+            <div class="ref-card-footer"><a href="#" onclick="event.preventDefault()">View Rule Details</a></div>
         </div>
         <p>This rule would automatically resolve similar exceptions for AA Corp, saving time and maximizing discounts.</p>
         <div class="action-buttons">
@@ -379,18 +413,21 @@ async function handleConfirmBusinessRule() {
             <i class="fas fa-check-circle"></i>
             <div>Business rule <strong>BR-2026-0142</strong> created successfully and is now <strong>Active</strong>.</div>
         </div>
-        <div class="joule-list-card compact">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-cog" style="color: var(--primary)"></i>
-                    <div><h3>Rule: AA Corp Auto-Resolution</h3><span class="list-card-subtitle">BR-2026-0142</span></div>
-                </div>
-                <span class="status-badge success">Active</span>
+        <div class="reference-card">
+            <div class="ref-card-header">
+                <a class="ref-card-title">Rule: Terms Mismatch Auto-Resolution</a>
+                <span class="ref-card-status success">Active</span>
             </div>
-            <div class="list-card-body summary-body">
-                <div class="detail-row"><span class="detail-label">Created</span><span class="detail-value">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></div>
-                <div class="detail-row"><span class="detail-label">Created By</span><span class="detail-value">Jane Doe (AP Manager)</span></div>
+            <div class="ref-card-subtitle">BR-2026-0142</div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Created</div>
+                <div class="ref-card-field-value">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
             </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Created By</div>
+                <div class="ref-card-field-value">Jane Doe (AP Manager)</div>
+            </div>
+            <div class="ref-card-footer"><a href="#" onclick="event.preventDefault()">View Rule Details</a></div>
         </div>
         <p>Now let me apply this rule to the remaining invoices...</p>
     `;
@@ -405,17 +442,17 @@ async function handleSkipBusinessRule() {
 }
 
 async function processRemainingInvoices() {
-    const remainingInvoices = [
-        { id: 'INV-2024-0852', supplier: 'AA Corp', amount: 45200, savings: 45200 * 0.02 },
-        { id: 'INV-2024-0839', supplier: 'Beta Industries', amount: 23400, savings: 0 },
-    ];
+    const remainingInvoices = invoiceData.slice(1); // all except the first one (already resolved)
+    const autoResolve = remainingInvoices.filter(inv => !inv.noDiscount);
+    const flagged = remainingInvoices.filter(inv => inv.noDiscount);
+    const totalRemaining = remainingInvoices.length;
 
     const progressHTML = `
-        <p>⚙️ Processing remaining 2 invoices...</p>
+        <p>Applying rule to remaining ${totalRemaining} invoices...</p>
         <div class="progress-container">
             <div class="progress-header-row">
                 <span class="progress-label">Processing Invoices</span>
-                <span class="progress-count" id="progressCount">0 / 2</span>
+                <span class="progress-count" id="progressCount">0 / ${totalRemaining}</span>
             </div>
             <div class="progress-bar-track"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
             <div class="progress-items" id="progressItems">
@@ -431,18 +468,126 @@ async function processRemainingInvoices() {
     await addBotMessage(progressHTML, 1500);
 
     for (let i = 0; i < remainingInvoices.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 800));
+        const inv = remainingInvoices[i];
+        await new Promise(resolve => setTimeout(resolve, 500));
         const icon = document.getElementById(`progressIcon${i}`);
         icon.className = 'fas fa-spinner fa-spin progress-icon processing';
-        await new Promise(resolve => setTimeout(resolve, 600));
-        icon.className = 'fas fa-check-circle progress-icon done';
+        await new Promise(resolve => setTimeout(resolve, 400));
+
+        if (inv.noDiscount) {
+            // Flagged — warning icon
+            icon.className = 'fas fa-exclamation-triangle progress-icon';
+            icon.style.color = 'var(--warning)';
+        } else {
+            // Auto-resolved — check icon
+            icon.className = 'fas fa-check-circle progress-icon done';
+        }
         const progress = Math.round(((i + 1) / remainingInvoices.length) * 100);
         document.getElementById('progressBar').style.width = progress + '%';
-        document.getElementById('progressCount').textContent = `${i + 1} / 2`;
+        document.getElementById('progressCount').textContent = `${i + 1} / ${totalRemaining}`;
     }
 
+    // Show result summary
     await new Promise(resolve => setTimeout(resolve, 800));
-    await showFinalSummary();
+    const flaggedHTML = `
+        <p class="section-header">Processing Complete</p>
+        <ul class="bullet-list">
+            <li><strong>${autoResolve.length} invoices</strong> auto-resolved — Net 30 with 2% early payment discount applied</li>
+            <li><strong>${flagged.length} invoices</strong> flagged — no early payment discount available, manual review required</li>
+        </ul>
+        <p>Let me walk you through the ${flagged.length} flagged invoices for your decision.</p>
+    `;
+    await addBotMessage(flaggedHTML, 1500);
+
+    // Transition to manual intervention
+    state.conversationPhase = 'manual-intervention';
+    state.manualStep = 0;
+    await showManualInvoice(0);
+}
+
+// ========================================
+// Phase 5: Manual Intervention
+// ========================================
+const flaggedInvoices = () => invoiceData.filter(inv => inv.noDiscount);
+
+async function showManualInvoice(index) {
+    const flagged = flaggedInvoices();
+    const inv = flagged[index];
+
+    const manualHTML = `
+        <p class="section-header">Manual Review Required (${index + 1} of ${flagged.length})</p>
+        <p>This invoice does not qualify for early payment discount. The supplier's contract terms (<strong>${inv.terms}</strong>) do not include a discount provision.</p>
+        <div class="reference-card">
+            <div class="ref-card-header">
+                <a class="ref-card-title">${inv.id} — ${inv.supplier}</a>
+                <span class="ref-card-status danger">Flagged</span>
+            </div>
+            <div class="ref-card-subtitle">Due ${new Date(inv.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Invoice Amount</div>
+                <div class="ref-card-field-value">${formatCurrency(inv.amount)}</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Payment Terms</div>
+                <div class="ref-card-field-value">${inv.terms}</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Early Payment Discount</div>
+                <div class="ref-card-field-value highlight-red">Not Available</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Reason</div>
+                <div class="ref-card-field-value normal">Supplier contract does not include early payment discount terms. Paying this invoice at full amount provides no cost benefit. Recommend rejecting and renegotiating terms with the supplier.</div>
+            </div>
+            <div class="ref-card-footer"><a href="#" onclick="event.preventDefault()">View Invoice Details</a></div>
+        </div>
+        <p class="ai-disclaimer">***System recommendation: Reject this invoice and request updated terms from the supplier.***</p>
+        <div class="action-buttons">
+            <button class="action-btn danger" onclick="sendSuggestion('Reject invoice ${inv.id}')"><i class="fas fa-times"></i> Reject (Recommended)</button>
+            <button class="action-btn secondary" onclick="sendSuggestion('Approve invoice ${inv.id} anyway')"><i class="fas fa-check"></i> Approve Anyway</button>
+        </div>
+    `;
+    await addBotMessage(manualHTML, 1500);
+}
+
+async function handleRejectInvoice() {
+    const flagged = flaggedInvoices();
+    const inv = flagged[state.manualStep];
+    state.rejectedCount++;
+
+    await addBotMessage(`
+        <div class="danger-card">
+            <i class="fas fa-ban"></i>
+            <div>Invoice <strong>${inv.id}</strong> from <strong>${inv.supplier}</strong> (${formatCurrency(inv.amount)}) has been <strong>rejected</strong>. A notification has been sent to the supplier requesting updated payment terms.</div>
+        </div>
+    `, 1200);
+
+    state.manualStep++;
+    if (state.manualStep < flagged.length) {
+        await showManualInvoice(state.manualStep);
+    } else {
+        await showFinalSummary();
+    }
+}
+
+async function handleApproveInvoice() {
+    const flagged = flaggedInvoices();
+    const inv = flagged[state.manualStep];
+    state.approvedNoDiscount++;
+
+    await addBotMessage(`
+        <div class="info-card">
+            <i class="fas fa-info-circle"></i>
+            <div>Invoice <strong>${inv.id}</strong> from <strong>${inv.supplier}</strong> (${formatCurrency(inv.amount)}) has been <strong>approved</strong> at full amount with no early payment discount.</div>
+        </div>
+    `, 1200);
+
+    state.manualStep++;
+    if (state.manualStep < flagged.length) {
+        await showManualInvoice(state.manualStep);
+    } else {
+        await showFinalSummary();
+    }
 }
 
 // ========================================
@@ -450,31 +595,55 @@ async function processRemainingInvoices() {
 // ========================================
 async function showFinalSummary() {
     state.conversationPhase = 'completed';
-    const totalSavings = (78500 + 45200) * 0.02;
+    const autoResolved = invoiceData.filter(inv => !inv.noDiscount).length - 1; // minus the one resolved manually
+    const totalDiscountInvoices = invoiceData.filter(inv => !inv.noDiscount);
+    const totalSavings = totalDiscountInvoices.reduce((sum, inv) => sum + inv.amount * 0.02, 0);
 
     const summaryHTML = `
-        <p>🎉 <strong>All done!</strong> Here's the complete session summary:</p>
-        <div class="joule-list-card final-summary">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <i class="fas fa-clipboard-check" style="color: var(--success)"></i>
-                    <div><h3>Session Summary</h3><span class="list-card-subtitle">All exceptions processed</span></div>
-                </div>
-                <span class="status-badge success">Complete</span>
+        <p><strong>All done.</strong> Here is the complete session summary:</p>
+        <div class="reference-card">
+            <div class="ref-card-header">
+                <a class="ref-card-title">Session Summary</a>
+                <span class="ref-card-status success">Complete</span>
             </div>
-            <div class="list-card-body summary-body">
-                <div class="detail-row"><span class="detail-label">Total Exceptions Processed</span><span class="detail-value">3</span></div>
-                <div class="detail-row"><span class="detail-label">Resolved — Net 30 Applied</span><span class="detail-value" style="color: var(--success)">2 invoices (AA Corp)</span></div>
-                <div class="detail-row"><span class="detail-label">Auto-Resolved (Business Rule)</span><span class="detail-value">1</span></div>
-                <div class="detail-row"><span class="detail-label">Overdue — Escalated</span><span class="detail-value" style="color: var(--danger)">1 invoice (Beta Industries)</span></div>
-                <div class="detail-row"><span class="detail-label">Business Rule Created</span><span class="detail-value">BR-2026-0142</span></div>
-                <div class="detail-row"><span class="detail-label">Total Invoice Amount Processed</span><span class="detail-value">${formatCurrency(78500 + 45200 + 23400)}</span></div>
-                <div class="detail-row highlight-row"><span class="detail-label">Total Discount Savings</span><span class="detail-value highlight-green">${formatCurrency(totalSavings)}</span></div>
+            <div class="ref-card-subtitle">All ${invoiceData.length} exceptions processed</div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Total Exceptions Processed</div>
+                <div class="ref-card-field-value">${invoiceData.length}</div>
             </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Manually Resolved</div>
+                <div class="ref-card-field-value">1 invoice (INV-2024-0847)</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Auto-Resolved (Business Rule)</div>
+                <div class="ref-card-field-value">${autoResolved} invoices</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Rejected (No Discount)</div>
+                <div class="ref-card-field-value highlight-red">${state.rejectedCount} invoice${state.rejectedCount !== 1 ? 's' : ''}</div>
+            </div>
+            ${state.approvedNoDiscount > 0 ? `<div class="ref-card-field">
+                <div class="ref-card-field-label">Approved Without Discount</div>
+                <div class="ref-card-field-value">${state.approvedNoDiscount} invoice${state.approvedNoDiscount !== 1 ? 's' : ''}</div>
+            </div>` : ''}
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Business Rule Created</div>
+                <div class="ref-card-field-value">BR-2026-0142</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Total Invoice Amount Processed</div>
+                <div class="ref-card-field-value">${formatCurrency(invoiceData.reduce((sum, inv) => sum + inv.amount, 0))}</div>
+            </div>
+            <div class="ref-card-field">
+                <div class="ref-card-field-label">Total Discount Savings</div>
+                <div class="ref-card-field-value highlight-green">${formatCurrency(totalSavings)}</div>
+            </div>
+            <div class="ref-card-footer"><a href="#" onclick="event.preventDefault()">View Full Report</a></div>
         </div>
         <div class="success-card">
             <i class="fas fa-check-circle"></i>
-            <div>Business rule <strong>BR-2026-0142</strong> is active. Overdue invoice <strong>INV-2024-0839</strong> from <strong>Beta Industries</strong> has been escalated for review.</div>
+            <div>Business rule <strong>BR-2026-0142</strong> is active and will auto-resolve future Terms Mismatch exceptions.${state.rejectedCount > 0 ? ` <strong>${state.rejectedCount}</strong> rejected invoice${state.rejectedCount !== 1 ? 's' : ''} — suppliers have been notified to submit updated terms.` : ''}</div>
         </div>
         <p>Is there anything else you'd like me to help with?</p>
         <div class="action-buttons">

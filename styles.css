@@ -799,6 +799,119 @@ body {
 .chat-messages::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
 /* ========================================
+   Reference Card (Contract/Document style)
+   ======================================== */
+.reference-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    margin: 14px auto;
+    max-width: 480px;
+    box-shadow: var(--shadow-sm);
+}
+
+.ref-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.ref-card-title {
+    color: var(--sapBrandColor);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+    text-decoration: none;
+}
+.ref-card-title:hover { text-decoration: underline; }
+
+.ref-card-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+.ref-card-status.success { color: var(--success); }
+.ref-card-status.danger { color: var(--danger); }
+
+.ref-card-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 2px;
+}
+
+.ref-card-field {
+    margin-top: 14px;
+}
+.ref-card-field-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 2px;
+}
+.ref-card-field-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+.ref-card-field-value.highlight-green { color: var(--success); }
+.ref-card-field-value.highlight-red { color: var(--danger); }
+.ref-card-field-value.normal { font-weight: 400; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+.ref-card-footer {
+    text-align: center;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-light);
+}
+.ref-card-footer a {
+    color: var(--sapBrandColor);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+}
+.ref-card-footer a:hover { text-decoration: underline; }
+
+/* ========================================
+   Conversation Text Helpers
+   ======================================== */
+.section-header {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 14px 0 6px 0;
+}
+.section-header:first-child { margin-top: 0; }
+
+.bullet-list {
+    margin: 6px 0 10px 0;
+    padding-left: 20px;
+    list-style: disc;
+}
+.bullet-list li {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 4px;
+}
+
+.ai-disclaimer {
+    font-size: 13px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 8px 0;
+}
+
+/* ========================================
    Responsive
    ======================================== */
 @media (max-width: 768px) {
