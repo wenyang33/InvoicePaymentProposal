@@ -193,85 +193,59 @@ function sendUserMessage(text) {
 // ========================================
 async function handleExceptionQuery() {
     state.conversationPhase = 'showing-exceptions';
-
-    const stepsHTML = `
-        <p>🔍 Let me find invoices with payment exceptions for the past 10 days. Here's what I'm doing:</p>
-        <div class="steps-container">
-            <div class="step-item">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <strong>Filtering by Date Range</strong>
-                    <span>Scanning invoices from Apr 4 – Apr 14, 2026</span>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <strong>Identifying Exceptions</strong>
-                    <span>Checking payment terms mismatches, price variances, and duplicates</span>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <strong>Severity Assessment</strong>
-                    <span>Ranking exceptions by financial impact and urgency</span>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <strong>Compiling Results</strong>
-                    <span>Found <strong>3 invoices</strong> with payment exceptions</span>
-                </div>
-            </div>
-        </div>
-    `;
-    await addBotMessage(stepsHTML, 1500);
-
     const visibleCount = 3;
     const totalCount = invoiceData.length;
-    const tableHTML = `
-        <div class="joule-list-card">
-            <div class="list-card-header">
-                <div class="list-card-title">
-                    <div>
-                        <h3>Payment Exceptions</h3>
-                        <span class="list-card-subtitle">Invoices requiring attention</span>
-                    </div>
-                </div>
-                <span class="list-card-count">${visibleCount} of ${totalCount}</span>
-            </div>
-            <div class="list-card-body">
-                ${invoiceData.slice(0, visibleCount).map((inv) => `
-                    <div class="list-card-item">
-                        <div class="item-icon">
-                            <i class="fas fa-file-invoice"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-id">${inv.id}</span>
-                            <span class="item-supplier">${inv.supplier}</span>
-                            <span class="item-due">Due ${new Date(inv.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                        </div>
-                        <div class="item-right">
-                            <span class="item-exception-label">${inv.exception}</span>
-                            <button class="item-detail-btn" onclick="event.stopPropagation()">More Details</button>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-            <div class="list-card-footer">
-                <button onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')">Resolve</button>
-                <a href="#" onclick="event.preventDefault()">View More</a>
+
+    // Single message: processing card + hidden invoice results
+    const combinedHTML = `
+        <div class="processing-card" id="processingCard">
+            <div class="processing-bar-track"><div class="processing-bar-fill" id="processingBarFill"></div></div>
+            <div class="processing-steps">
+                <div class="processing-step" id="pStep0" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Filtering by date range (Apr 4 – Apr 14, 2026)</span><span class="processing-chevron">›</span></div>
+                <div class="processing-step" id="pStep1" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Identifying payment exceptions</span><span class="processing-chevron">›</span></div>
+                <div class="processing-step" id="pStep2" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Severity assessment &amp; ranking</span><span class="processing-chevron">›</span></div>
+                <div class="processing-step" id="pStep3" style="opacity:0"><span class="processing-check"><i class="fas fa-check"></i></span><span class="processing-label">Compiling results — <strong>3 invoices</strong> found</span><span class="processing-chevron">›</span></div>
             </div>
         </div>
-        <p>⚠️ The most severe is <strong>${invoiceData[0].id}</strong> from <strong>${invoiceData[0].supplier}</strong> for <strong>${formatCurrency(invoiceData[0].amount)}</strong> — <strong>Terms Mismatch</strong>, ${invoiceData[0].daysOverdue} days overdue. Shall I resolve it?</p>
-        <div class="action-buttons">
-            <button class="action-btn primary" onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')"><i class="fas fa-wrench"></i> Yes, resolve it</button>
-            <button class="action-btn secondary" onclick="sendSuggestion('Show me more details')"><i class="fas fa-info-circle"></i> More details</button>
+        <div id="invoiceResultsSection" style="opacity:0; max-height:0; overflow:hidden; transition: opacity 0.5s ease, max-height 0.6s ease;">
+            <div class="joule-list-card" style="margin-top:12px;">
+                <div class="list-card-header"><div class="list-card-title"><div><h3>Payment Exceptions</h3><span class="list-card-subtitle">Invoices requiring attention</span></div></div><span class="list-card-count">${visibleCount} of ${totalCount}</span></div>
+                <div class="list-card-body">
+                    ${invoiceData.slice(0, visibleCount).map((inv) => `
+                        <div class="list-card-item">
+                            <div class="item-icon"><i class="fas fa-file-invoice"></i></div>
+                            <div class="item-content"><span class="item-id">${inv.id}</span><span class="item-supplier">${inv.supplier}</span><span class="item-due">Due ${new Date(inv.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></div>
+                            <div class="item-right"><span class="item-exception-label">${inv.exception}</span><button class="item-detail-btn" onclick="event.stopPropagation()">More Details</button></div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="list-card-footer"><button onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')">Resolve</button><a href="#" onclick="event.preventDefault()">View More</a></div>
+            </div>
+            <p>⚠️ The most severe is <strong>${invoiceData[0].id}</strong> from <strong>${invoiceData[0].supplier}</strong> for <strong>${formatCurrency(invoiceData[0].amount)}</strong> — <strong>Terms Mismatch</strong>, ${invoiceData[0].daysOverdue} days overdue. Shall I resolve it?</p>
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="sendSuggestion('Yes, let\\'s resolve the most severe one')"><i class="fas fa-wrench"></i> Yes, resolve it</button>
+                <button class="action-btn secondary" onclick="sendSuggestion('Show me more details')"><i class="fas fa-info-circle"></i> More details</button>
+            </div>
         </div>
     `;
-    await addBotMessage(tableHTML, 2000);
+    await addBotMessage(combinedHTML, 800);
+
+    // Animate steps one by one
+    const stepIds = ['pStep0', 'pStep1', 'pStep2', 'pStep3'];
+    const bar = document.getElementById('processingBarFill');
+    for (let i = 0; i < stepIds.length; i++) {
+        await new Promise(r => setTimeout(r, 700));
+        const el = document.getElementById(stepIds[i]);
+        if (el) { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }
+        if (bar) bar.style.width = ((i + 1) / stepIds.length * 100) + '%';
+        scrollToBottom();
+    }
+
+    // Reveal invoice results
+    await new Promise(r => setTimeout(r, 600));
+    const results = document.getElementById('invoiceResultsSection');
+    if (results) { results.style.maxHeight = '2000px'; results.style.opacity = '1'; }
+    scrollToBottom();
 }
 
 // ========================================
