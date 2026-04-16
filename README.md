@@ -26,12 +26,12 @@ PayAssist AI simulates an intelligent assistant that walks users through the ent
 
 ### Walkthrough
 
-The agent guides you through a **4-phase conversational workflow**:
+The agent guides you through a **5-phase conversational workflow**:
 
 #### Phase 1 — Find Payment Exceptions
 - Click **"Find payment exceptions"** or type: *"What invoices need payment exceptions for the past 10 days?"*
-- The agent shows animated filtering steps and displays a list of 6 invoices with severity indicators
-- It highlights the most severe invoice and asks if you'd like to resolve it
+- The agent shows animated filtering steps and displays the top 3 of **10 invoices** with exception indicators
+- It highlights the most critical invoice and recommends resolving it first
 
 #### Phase 2 — Resolve the Most Severe Invoice
 - Click **"Yes, resolve it"** to proceed
@@ -41,27 +41,33 @@ The agent guides you through a **4-phase conversational workflow**:
 - Click **"Confirm Net 30"** to accept the recommended option
 
 #### Phase 3 — Business Rule Creation
-- The agent detects a pattern: 4 of 6 exceptions are from **AA Corp** with the same issue
-- It proposes a **business rule** to auto-resolve similar cases in the future
+- The agent detects a pattern: 7 of 10 exceptions follow the same "Terms Mismatch" pattern
+- It proposes a **business rule** to auto-resolve similar cases with early payment discounts
 - Click **"Create Rule"** to activate the rule, or **"Skip for now"** to continue without it
 
 #### Phase 4 — Batch Process Remaining Invoices
-- The agent automatically processes the remaining AA Corp invoices using the new rule
+- The agent applies the rule to the remaining **9 invoices**
 - An animated progress bar shows real-time processing status
-- Two invoices without discounts (Beta Industries, Gamma LLC) are flagged for manual review
-- For each, the agent provides an **AI recommendation** (Reject/Approve) with reasoning
-- A **final summary** shows all actions taken, total savings, and next steps
+- **7 invoices** are auto-resolved with checkmarks
+- **2 invoices** (Epsilon Ltd, Zeta Group) are flagged with warnings — no early payment discount available
+
+#### Phase 5 — Manual Intervention
+- For each of the 2 flagged invoices, the agent presents a detailed **reference card** with:
+  - Invoice amount, payment terms, and reason for flagging
+  - System recommendation to **reject** and request updated terms from the supplier
+- User can choose **"Reject (Recommended)"** or **"Approve Anyway"** for each
+- A **final summary** shows all 10 invoices processed, total savings, rejected count, and active business rule
 
 ## Features
 
 - **Guided Conversation Flow** — Natural language input with smart intent detection
-- **Animated Steps** — Visual progress indicators for filtering and processing
+- **Animated Steps** — Visual progress indicators for filtering and batch processing
 - **Side-by-Side Comparison Cards** — Clear presentation of payment term options
-- **Severity Indicators** — Color-coded badges (Critical, High, Medium) for quick prioritization
+- **Reference Cards** — SAP-style document cards with stacked fields and status badges
 - **Business Rule Engine** — Pattern detection and automated rule creation
-- **Batch Processing** — Animated progress bar for bulk invoice resolution
-- **Manual Review Mode** — AI-powered recommendations for edge cases
-- **Session Summary** — Complete audit trail of all actions and savings
+- **Batch Processing** — Animated progress bar for bulk invoice resolution (10 invoices)
+- **Manual Intervention** — AI-powered rejection recommendations for no-discount invoices
+- **Dynamic Summary** — Complete audit trail with counts that reflect user decisions
 
 ## Tech Stack
 
